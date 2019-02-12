@@ -3,4 +3,22 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-@import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
+/* @import "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css"; */
+
+.mat-drawer-container {
+  background-color: #333333;
+}
+
+.mat-list-base {
+  .mat-list-item {
+    color: #aaaaaa;
+    span {
+      margin-left: 5px;
+    }
+    &:hover {
+      color: #ffffff;
+    }
+  }
+}
+
+

@@ -4,13 +4,19 @@
 
 .sidenav {
   width: 200px;
+  background-color: #222222;
+  border-right: 1px solid #181818;
 }
 
 .sidenav .mat-toolbar {
   background: inherit;
+  border-bottom: 1px solid #181818;
+  color: #ffffff;
 }
 
 .mat-toolbar.mat-primary {
+  background-color: #222222;
+  border-bottom: 1px solid #181818;
   position: sticky;
   top: 0;
   z-index: 1;
