@@ -5,6 +5,19 @@
       [opened]="!(isHandset$ | async)">
     <mat-toolbar>ANYTIME LIBRARY</mat-toolbar>
     <mat-nav-list>
+
+      <button mat-button [matMenuTriggerFor]="menu">Menu</button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>Item 1</button>
+        <button mat-menu-item>Item 2</button>
+      </mat-menu>
+
+      <!--<mat-list-item (click)="menuTrigger.openMenu()">Browse</mat-list-item>-->
+      <!--<mat-list style="margin-left:30px;" #menu="matMenu">-->
+        <!--<mat-list-item>Science</mat-list-item>-->
+        <!--<mat-list-item>Biographies</mat-list-item>-->
+        <!--<mat-list-item>Text books</mat-list-item>-->
+      <!--</mat-list>-->
       <a mat-list-item href="#">
         <i class="fa fa-book" aria-hidden="true"></i>
         <span>Books</span>
@@ -32,5 +45,6 @@
       <!--<span>anytime-library</span>-->
     </mat-toolbar>
     <!-- Add Content Here -->
+    <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
