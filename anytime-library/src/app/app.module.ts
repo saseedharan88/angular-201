@@ -8,35 +8,38 @@ import { NavComponent } from './nav/nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule, MatMenuModule, MatTabsModule, MatInputModule } from '@angular/material';
 import { AdminModule } from './admin/admin.module';
-import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { BooksComponent } from './books/books.component';
-import { BookDetailComponent } from './book-detail/book-detail.component';
 import { PrimaryNavComponent } from './primary-nav/primary-nav.component';
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './navigation/header/header.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
 import { SearchComponent } from './navigation/search/search.component';
+import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
+
+import { BookModule } from './book/book.module';
+import { UserModule } from './user/user.module';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     NavComponent,
-    LoginComponent,
     RegisterComponent,
-    BooksComponent,
-    BookDetailComponent,
     PrimaryNavComponent,
     LayoutComponent,
     HeaderComponent,
     SidenavListComponent,
-    SearchComponent
+    SearchComponent,
+    PagenotfoundComponent,
+    WelcomeComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
+    AdminModule,
+    BookModule,
+    UserModule,
     BrowserAnimationsModule,
     LayoutModule,
     MatToolbarModule,
@@ -47,8 +50,8 @@ import { SearchComponent } from './navigation/search/search.component';
     MatMenuModule,
     MatTabsModule,
     MatInputModule,
-    AdminModule,
     FlexLayoutModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
