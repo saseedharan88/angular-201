@@ -26,6 +26,9 @@ Vagrant.configure("2") do |config|
   # config.vm.network "forwarded_port", guest: 80, host: 8080
   config.vm.network "forwarded_port", guest: 4200, host: 4200
 
+  #Port for MongoDB
+  config.vm.network "forwarded_port", guest: 27019, host: 27019
+
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine and only allow access
@@ -68,9 +71,30 @@ Vagrant.configure("2") do |config|
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
      curl -sL https://deb.nodesource.com/setup_8.x | bash -
-     apt-get update
-     apt-get install -y nodejs
-     npm install npm --global
-     npm install --unsafe-perm -g @angular/cli	
-   SHELL
+
+     #Step 1: Import the MongoDB public key
+     sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
+
+     #Step 2: Generate a file with the MongoDB repository url
+     echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/4.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.0.list
+
+     #Step 3: Refresh the local database with the packages
+     sudo apt-get update
+
+     #Step 4: Install the last stable MongoDB version and all the necessary packages on our system
+     sudo apt-get install -y mongodb-org
+
+     #Step 5: Start Mongodb
+     sudo service mongod start
+
+     #Install Node JS
+     sudo apt-get install -y nodejs
+
+     #Install NPM
+     sudo npm install npm --global
+
+     #Install Angular CLI
+     sudo npm install --unsafe-perm -g @angular/cli
+
+  SHELL
 end
