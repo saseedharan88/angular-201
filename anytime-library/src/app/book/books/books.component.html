@@ -3,8 +3,13 @@
   <li><a [routerLink]="['/books',101]">Sample Book with ID 101</a></li>
   <li><a [routerLink]="['/books',101,'edit']">Edit</a></li>
   <li><a [routerLink]="['/books',0,'edit']">Add</a></li>
+  <li><a [routerLink]="['/books', {name: 'Oru puliyamarathin Kathai', code: 'OPK', author: 'Sundara ramasamy'}]">Optional Parameters example</a></li>
+  <li><a [routerLink]="['/books',001]" [queryParams]="{name: 'Oru puliyamarathin Kathai', code: 'OPK', author: 'Sundara ramasamy'}">Query Parameters example</a></li>
 </ul>
 
+<p>Name: {{ bookName }}</p>
+<p>Author: {{ bookAuthor }}</p>
+<p>Code: {{ bookCode }}</p>
 
 
 
