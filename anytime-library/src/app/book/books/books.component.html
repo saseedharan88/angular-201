@@ -11,5 +11,14 @@
 <p>Author: {{ bookAuthor }}</p>
 <p>Code: {{ bookCode }}</p>
 
+<div *ngFor="let book of bookService.books">
+  <mat-card>
+    ISBN: {{ book.isbn }}
+    Name: {{ book.book_name }}
+  </mat-card>
+</div>
+
+
+
 
 

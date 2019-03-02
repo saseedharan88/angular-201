@@ -1,6 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+
+import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule,
+    MatMenuModule, MatTabsModule, MatInputModule, MatCardModule } from '@angular/material';
+
 import { BookService } from './book.service';
 
 import { BookRoutingModule } from './book-routing.module';
@@ -17,6 +21,7 @@ import { BookEditComponent } from './book-edit/book-edit.component';
     HttpClientModule,
     BookRoutingModule,
     SharedModule,
+    MatCardModule
   ],
   providers: [
     BookService
