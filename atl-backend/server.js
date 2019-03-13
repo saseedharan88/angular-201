@@ -5,6 +5,7 @@ var mongoose = require('mongoose')
 var app = express()
 
 var Book = require('./models/Book.js')
+var User = require('./models/User.js')
 
 var books = [
   { isbn: 'abcdef', book_name: 'Data structures' },
@@ -25,8 +26,13 @@ app.get('/books', (req, res) => {
 // User register service.
 app.post('/register', (req, res) => {
   var userData = req.body;
-  console.log(userData.name);
-  console.log(userData.password);
+
+  var user = new User(userData);
+  user.save((err, result) => {
+    if (err)
+      console.log("Error in registering a user."+err)
+    res.sendStatus(200)
+  })
   res.sendStatus(200)
 })
 
@@ -34,6 +40,13 @@ app.post('/register', (req, res) => {
 app.post('/addbook', (req, res) => {
 
   var bookData = req.body
+
+  bookData.subject = [{
+    name: "French fiction",
+    description: "This is desc about French fiction.",
+    isActive: true
+  }]
+
   console.log("In adding a book."+bookData.isbn+" / "+bookData.book_name)
   // res.sendStatus(200)
   var book = new Book(bookData)

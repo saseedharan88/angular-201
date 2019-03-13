@@ -1,0 +1,9 @@
+<form class="registration-form">
+  <mat-form-field class="registration-full-width">
+    <input matInput placeholder="Email ID" value="">
+  </mat-form-field>
+  <mat-form-field class="registration-full-width">
+    <input matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'">
+    <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+  </mat-form-field>
+</form>
