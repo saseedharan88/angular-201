@@ -1,9 +1,19 @@
-<form class="registration-form">
-  <mat-form-field class="registration-full-width">
-    <input matInput placeholder="Email ID" value="">
-  </mat-form-field>
-  <mat-form-field class="registration-full-width">
-    <input matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'">
-    <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-  </mat-form-field>
-</form>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <h4>Register New User</h4>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form class="registration-form">
+      <mat-form-field class="registration-full-width">
+        <input [(ngModel)]="registerData.email" name="email" matInput placeholder="Email ID" value="">
+      </mat-form-field>
+      <mat-form-field class="registration-full-width">
+        <input [(ngModel)]="registerData.password" name="password" matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'">
+        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </mat-form-field>
+      <button (click)="post()" mat-raised-button color="primary">Register</button>
+    </form>
+  </mat-card-content>
+</mat-card>

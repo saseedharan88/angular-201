@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule,
-    MatMenuModule, MatTabsModule, MatInputModule } from '@angular/material';
+    MatMenuModule, MatTabsModule, MatInputModule, MatCardModule } from '@angular/material';
+import { FormsModule } from '@angular/forms';
 
 import { UserRoutingModule } from './user-routing.module';
 import { LoginComponent } from './login/login.component';
@@ -19,7 +20,9 @@ import { RegisterComponent } from './register/register.component';
     MatListModule,
     MatMenuModule,
     MatTabsModule,
-    MatInputModule
+    MatInputModule,
+    MatCardModule,
+    FormsModule
   ]
 })
 export class UserModule { }

@@ -33,7 +33,7 @@ app.post('/register', (req, res) => {
       console.log("Error in registering a user."+err)
     res.sendStatus(200)
   })
-  res.sendStatus(200)
+  // res.sendStatus(200)
 })
 
 // Add Book service.
