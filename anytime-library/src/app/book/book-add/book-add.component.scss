@@ -1,0 +1,16 @@
+.book-add-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+  &__element {
+    width: 100%;
+    &-align-left {
+      float: left;
+      margin-right: 20px;
+    }
+  }
+  &__mat_icon {
+    font-size: 20px !important;
+  }
+}
+

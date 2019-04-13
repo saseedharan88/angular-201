@@ -1,0 +1,33 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <h4>Add new book</h4>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="bookAddForm" class="book-add-form">
+      <mat-form-field class="book-add-form__element">
+        <input type="text" required formControlName="title" matInput placeholder="ISBN">
+        <button (click)="populateTestData()" class="book-add-form__mat_icon" mat-button color="primary" matSuffix mat-icon-button aria-label="Search">
+          <mat-icon [inline]="true">search</mat-icon>
+        </button>
+      </mat-form-field>
+      <mat-form-field class="book-add-form__element">
+        <input type="text" required formControlName="title" matInput placeholder="Book Title">
+      </mat-form-field>
+      <mat-form-field class="book-add-form__element">
+        <input type="text" required formControlName="authors" matInput placeholder="Book Authors">
+      </mat-form-field>
+      <mat-form-field class="book-add-form__element">
+        <input type="text" required formControlName="bookCopies" matInput placeholder="Copies">
+      </mat-form-field>
+      <button (click)="populateTestData()" mat-raised-button color="primary" class="book-add-form__element-align-left">Add book</button>
+      <button (click)="populateTestData()" mat-raised-button color="primary" class="book-add-form__element-align-left">Set value</button>
+      <button (click)="populateOnlyName()" mat-raised-button color="primary">Patch value</button>
+    </form>
+  </mat-card-content>
+</mat-card>
+<br>Dirty : {{ bookAddForm.dirty }}
+<br>Touched : {{ bookAddForm.touched }}
+<br>Valid : {{ bookAddForm.valid }}
+<br>Value : {{ bookAddForm.value | json }}
