@@ -2,6 +2,8 @@ var express = require('express')
 var cors = require('cors')
 var bodyParser = require('body-parser')
 var mongoose = require('mongoose')
+var https = require('https');
+const GOOGLE_API = 'AIzaSyAEgLDMCrP3JuZxJSIwCZpyX6-1mJUooTQ';
 var app = express()
 
 var Book = require('./models/Book.js')
@@ -21,6 +23,36 @@ app.get('/', (req, res) => {
 
 app.get('/books', (req, res) => {
   res.send(books)
+})
+
+app.get('/search-books',(req, res) => {
+  var searchQuery = "";
+  if (req.query.isbn != "") {
+    searchQuery += "+isbn:"+req.query.isbn;
+  }
+  if (req.query.title != "") {
+    searchQuery += "+intitle:"+req.query.title;
+  }
+  if (req.query.author != "") {
+    searchQuery += "+inauthor:"+req.query.author;
+  }
+
+  https.get('https://www.googleapis.com/books/v1/volumes?q=' + searchQuery + '&maxResults=40&key=' + GOOGLE_API, (resp) => {
+    let data = '';
+
+    // A chunk of data has been recieved.
+    resp.on('data', (chunk) => {
+      data += chunk;
+    });
+
+    // The whole response has been received. Print out the result.
+    resp.on('end', () => {
+      res.send(data)
+    });
+
+  }).on("error", (err) => {
+    res.send(err.message)
+  });
 })
 
 // User register service.
