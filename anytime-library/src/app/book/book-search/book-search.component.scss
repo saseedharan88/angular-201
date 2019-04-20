@@ -9,3 +9,18 @@
   }
 }
 
+.book-search-filter {
+  margin-bottom: 20px;
+}
+
+.book-detail {
+  overflow: auto;
+  margin-bottom: 20px;
+  &__image {
+    float: left;
+    margin-right: 20px;
+  }
+  &__content {
+    margin-top: 20px;
+  }
+}

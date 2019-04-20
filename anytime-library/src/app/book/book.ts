@@ -1,38 +1,52 @@
-/* Defines the Book entity */
-interface IndustryIdentifiers {
-    type: string; // ISBN_10, ISBN_13 etc.
-    identifier: string;
-}
+// export class BookInfo {
+//     title: string;
+//     subtitle: string;
+//     authors: string[];
+//     imageLinks: ImageLinks;
+//     publisher: string;
+//     publishedDate: string;
+// }
+//
+// export class ImageLinks {
+//     smallThumbnail: string;
+//     thumbnail: string;
+// }
 
-
-export interface Book {
-    id: string;
-    title: string;
-    authors: string[];
-    publisher: string;
-    publishedDate: string;
-    description: string;
-    categories: string[];
-    pageCount: number;
-    averageRating: number;
-    ratingsCount: number;
-    thumbnail: string;
-    language: string;
-    identifiers: IndustryIdentifiers[];
-}
 
 export class Book {
+    kind: string;
     id: string;
-    title: string;
-    authors: string[];
-    publisher: string;
-    publishedDate: string;
-    description: string;
-    categories: string[];
-    pageCount: number;
-    averageRating: number;
-    ratingsCount: number;
-    thumbnail: string;
-    language: string;
-    identifiers: IndustryIdentifiers[];
+    etag: string[];
+    selfLink: string;
+    // volumeInfo: BookInfo;
+    // description: string;
+    // categories: string[];
+    // pageCount: number;
+    // averageRating: number;
+    // ratingsCount: number;
+    // thumbnail: string;
+    // language: string;
+    // identifiers: IndustryIdentifiers[];
 }
+
+export class BooksVolume {
+    kind: string;
+    totalItems: number;
+    items: Book[];
+}
+
+// export class Book {
+//     id: string;
+//     title: string;
+//     authors: string[];
+//     publisher: string;
+//     publishedDate: string;
+//     description: string;
+//     categories: string[];
+//     pageCount: number;
+//     averageRating: number;
+//     ratingsCount: number;
+//     thumbnail: string;
+//     language: string;
+//     identifiers: IndustryIdentifiers[];
+// }

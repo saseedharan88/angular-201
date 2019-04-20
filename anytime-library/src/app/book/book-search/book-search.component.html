@@ -1,7 +1,7 @@
-<mat-card>
+<mat-card class="book-search-filter">
   <mat-card-header>
     <mat-card-title>
-      <h4>Search books</h4>
+      <h4>Find books and add to library</h4>
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
@@ -23,10 +23,33 @@
   </mat-card-content>
 </mat-card>
 
-<!--<p>Total items: {{ bookService.books.totalItems }}</p>-->
-
-<div *ngFor="let book of bookService.books.items">
-  <mat-card>
-    {{ book.volumeInfo.title }}
-  </mat-card>
-</div>
+<mat-card class="book-detail" *ngFor="let book of books">
+  <img class="book-detail__image" mat-card-lg-image *ngIf="book.volumeInfo.imageLinks" src='{{ book.volumeInfo.imageLinks.thumbnail }}'>
+  <div>
+    <mat-card-title>{{ book.volumeInfo.title }}</mat-card-title>
+    <mat-card-subtitle *ngIf="book.volumeInfo.authors">
+      Authors:
+      <span *ngFor="let author of book.volumeInfo.authors; last as isLast">
+        {{ author }}<span *ngIf="!isLast">,</span>
+      </span>
+    </mat-card-subtitle>
+    <mat-card-subtitle *ngIf="book.volumeInfo.industryIdentifiers">
+      <span *ngFor="let isbnVals of book.volumeInfo.industryIdentifiers; last as isLast">
+        {{ isbnVals.type }}: {{ isbnVals.identifier }}<span *ngIf="!isLast">,</span>
+      </span>
+    </mat-card-subtitle>
+    <mat-card-subtitle *ngIf="book.volumeInfo.categories">
+      Categories:
+      <span *ngFor="let cat of book.volumeInfo.categories; last as isLast">
+        {{ cat }}<span *ngIf="!isLast">,</span>
+      </span>
+    </mat-card-subtitle>
+    <p>Make this ID : {{ book.id }}</p>
+    <button (click)="openDialog()" class="" mat-raised-button color="primary" aria-label="Search">
+      <mat-icon>library_add</mat-icon>
+    </button>
+    <!--<mat-card-content class="book-detail__content">-->
+      <!--<p *ngIf="book.volumeInfo.description">{{ book.volumeInfo.description }}</p>-->
+    <!--</mat-card-content>-->
+  </div>
+</mat-card>

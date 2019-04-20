@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 
 import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule,
-    MatMenuModule, MatTabsModule, MatInputModule, MatCardModule } from '@angular/material';
+    MatMenuModule, MatTabsModule, MatInputModule, MatCardModule, MatTableModule, MatDialogModule } from '@angular/material';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -16,7 +16,7 @@ import { SharedModule } from '../shared/shared.module';
 import { BookDetailComponent } from './book-detail/book-detail.component';
 import { BookEditComponent } from './book-edit/book-edit.component';
 import { BookAddComponent } from './book-add/book-add.component';
-import { BookSearchComponent } from './book-search/book-search.component';
+import { BookSearchComponent, BookAddDialogComponent } from './book-search/book-search.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +24,8 @@ import { BookSearchComponent } from './book-search/book-search.component';
     BookDetailComponent,
     BookEditComponent,
     BookAddComponent,
-    BookSearchComponent
+    BookSearchComponent,
+    BookAddDialogComponent
   ],
   imports: [
     CommonModule,
@@ -40,7 +41,12 @@ import { BookSearchComponent } from './book-search/book-search.component';
     MatMenuModule,
     MatTabsModule,
     MatInputModule,
-    MatCardModule
+    MatCardModule,
+    MatTableModule,
+    MatDialogModule
+  ],
+  entryComponents: [
+    BookAddDialogComponent
   ],
   providers: [
     BookService
