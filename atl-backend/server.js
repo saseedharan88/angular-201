@@ -1,25 +1,78 @@
-var express = require('express')
-var cors = require('cors')
-var bodyParser = require('body-parser')
-var mongoose = require('mongoose')
-var https = require('https');
-const GOOGLE_API = 'AIzaSyAEgLDMCrP3JuZxJSIwCZpyX6-1mJUooTQ';
-var app = express()
-
-var Book = require('./models/Book.js')
-var User = require('./models/User.js')
+const express = require('express'),
+app = express(),
+passport = require('passport'),
+router = express.Router(),
+cors = require('cors'),
+bodyParser = require('body-parser'),
+mongoose = require('mongoose'),
+https = require('https'),
+cookieParser = require('cookie-parser'),
+cookieSession = require('cookie-session'),
+session = require('express-session'),
+auth = require('./auth'),
+Book = require('./models/Book.js')
+User = require('./models/User.js');
 
 var books = [
   { isbn: 'abcdef', book_name: 'Data structures' },
   { isbn: 'abcdef', book_name: 'Advanced C++' }
 ]
 
+// Google Book.
+const GOOGLE_API = 'AIzaSyD41fpvX5zgAuYb2Y4ETOdcQKUVGYIj-Qg';
 app.use(cors())
 app.use(bodyParser.json())
+// Google Authentication.
+auth(passport);
+app.use(passport.initialize());
+app.use(cookieSession({
+  name: 'session',
+  keys: ['123'],
+  maxAge: 24 * 60 * 60 * 1000
+}));
+app.use(cookieParser());
+
+// app.use(session({
+//   secret: 's3cr3t',
+//   resave: true,
+//   saveUninitialized: true
+// }));
+// app.use(passport.session());
 
 app.get('/', (req, res) => {
-  res.send('This is any time library..')
+  if (req.session.token) {
+    res.cookie('token', req.session.token);
+    res.json({
+      status: 'session cookie set'
+    });
+  } else {
+    res.cookie('token', '')
+    res.json({
+      status: 'session cookie not set'
+    });
+  }
 })
+
+app.get('/auth/google', passport.authenticate('google', {
+  scope: ['https://www.googleapis.com/auth/userinfo.profile']
+}));
+
+app.get('/auth/google/callback',
+    passport.authenticate('google', {
+        failureRedirect: '/'
+    }),
+    (req, res) => {
+        console.log(req.user.token);
+        req.session.token = req.user.token;
+        res.redirect('/');
+    }
+);
+
+app.get('/logout', (req, res) => {
+  req.logout();
+  req.session = null;
+  res.redirect('/');
+});
 
 app.get('/books', (req, res) => {
   res.send(books)

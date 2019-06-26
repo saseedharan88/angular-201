@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
-import { Book, BooksVolume } from './book';
+import { Book, BooksVolume } from '../book';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 
@@ -14,7 +14,7 @@ export class BookService {
   constructor(private http: HttpClient) { }
 
     getBooks() {
-        return this.http.get('http://55.55.55.5:3000/books').subscribe((res: {}) => {
+        return this.http.get('http://localhost:3000/books').subscribe((res: {}) => {
             console.log('Res:' + res);
             this.books = res;
         });
@@ -30,9 +30,9 @@ export class BookService {
     // }
 
     // HttpClient API get() method => Search books.
-    searchBooks(args): Observable {
+    searchBooks(args): Observable<any> {
         const params = new HttpParams().set('isbn', args.isbn).set('title', args.title).set('author', args.author);
-        return this.http.get('http://55.55.55.5:3000/search-books', { params: params })
+        return this.http.get('http://localhost:3000/search-books', { params: params })
         .pipe(
             retry(1),
             catchError(this.handleError)

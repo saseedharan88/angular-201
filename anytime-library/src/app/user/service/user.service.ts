@@ -6,6 +6,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class UserService {
 
+  googleForm: any;
+
   constructor(private http: HttpClient) { }
 
   registerUser(registerData) {

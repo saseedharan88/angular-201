@@ -3,7 +3,7 @@ import {Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, ActivatedRoute} fr
 
 import { Observable } from 'rxjs';
 
-import { Book } from './book';
+import { Book } from '../book';
 import {BookService} from './book.service';
 
 @Injectable({

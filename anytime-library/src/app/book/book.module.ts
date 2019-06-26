@@ -7,7 +7,7 @@ import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, Mat
 
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { BookService } from './book.service';
+import { BookService } from './service/book.service';
 
 import { BookRoutingModule } from './book-routing.module';
 import { BooksComponent } from './books/books.component';
