@@ -1,20 +1,25 @@
-import { Component } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Component, OnInit, NgZone } from '@angular/core';
+
+const SMALL_WIDTH_BREAKPOINT = 720;
 
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.css']
+  styleUrls: ['./nav.component.scss']
 })
-export class NavComponent {
+export class NavComponent implements OnInit {
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
-    .pipe(
-      map(result => result.matches)
-    );
+  private mediaMatcher: MediaQueryList = matchMedia(`(max-width: ${SMALL_WIDTH_BREAKPOINT}px)`);
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(zone: NgZone) {
+    this.mediaMatcher.addListener(mql =>
+        zone.run(() => this.mediaMatcher = mql));
+  }
 
+  ngOnInit() {
+  }
+
+  isScreenSmall(): boolean {
+    return this.mediaMatcher.matches;
+  }
 }

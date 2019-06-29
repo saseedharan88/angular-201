@@ -1,13 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule,
-    MatMenuModule, MatTabsModule, MatInputModule, MatCardModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 
 import { UserRoutingModule } from './user-routing.module';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-
+import { MaterialModule } from '../shared/material.module';
 import { SocialLoginModule } from 'angularx-social-login';
 import { AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider, LinkedInLoginProvider  } from 'angularx-social-login';
 
@@ -35,15 +33,7 @@ export function provideConfig() {
   imports: [
     CommonModule,
     UserRoutingModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
-    MatMenuModule,
-    MatTabsModule,
-    MatInputModule,
-    MatCardModule,
+    MaterialModule,
     FormsModule,
     SocialLoginModule
   ],

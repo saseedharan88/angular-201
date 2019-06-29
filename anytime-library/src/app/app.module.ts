@@ -7,8 +7,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavComponent } from './nav/nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
-import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule,
-MatMenuModule, MatTabsModule, MatInputModule } from '@angular/material';
+import { MaterialModule } from './shared/material.module';
 import { AdminModule } from './admin/admin.module';
 import { RegisterComponent } from './register/register.component';
 import { PrimaryNavComponent } from './primary-nav/primary-nav.component';
@@ -22,6 +21,7 @@ import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 import { BookModule } from './book/book.module';
 import { UserModule } from './user/user.module';
 import { WelcomeComponent } from './welcome/welcome.component';
+import { ToolbarComponent } from './toolbar/toolbar.component';
 
 
 @NgModule({
@@ -35,7 +35,8 @@ import { WelcomeComponent } from './welcome/welcome.component';
     SidenavListComponent,
     SearchComponent,
     PagenotfoundComponent,
-    WelcomeComponent
+    WelcomeComponent,
+    ToolbarComponent
   ],
   imports: [
     BrowserModule,
@@ -45,14 +46,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
     UserModule,
     BrowserAnimationsModule,
     LayoutModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
-    MatMenuModule,
-    MatTabsModule,
-    MatInputModule,
+    MaterialModule,
     FlexLayoutModule,
     AppRoutingModule
   ],

@@ -144,9 +144,11 @@ app.post('/addbook', (req, res) => {
 
 
 //Set up mongoose connection
-var mongoDB = 'mongodb://atluser:jKiRsnG4rdvkFU0m@cluster0-shard-00-00-r9ag9.mongodb.net:27017,cluster0-shard-00-01-r9ag9.mongodb.net:27017,cluster0-shard-00-02-r9ag9.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true';
+//var mongoDB = 'mongodb://atluser:jKiRsnG4rdvkFU0m@cluster0-shard-00-00-r9ag9.mongodb.net:27017,cluster0-shard-00-01-r9ag9.mongodb.net:27017,cluster0-shard-00-02-r9ag9.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true';
+
+var mongoDB = 'mongodb://127.0.0.1:27017/local';
 mongoose.connect(mongoDB, { useNewUrlParser: true }, (err) => {
-  console.log('attenpt connected to mongo !!');
+  console.log('attempt connected to mongo !!');
   if (!err)
     console.log('connected to mongo !!');
   console.log("err:"+err);

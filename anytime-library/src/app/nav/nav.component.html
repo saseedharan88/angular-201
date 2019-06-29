@@ -1,50 +1,23 @@
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" fixedInViewport="true"
-      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-      [mode]="(isHandset$ | async) ? 'over' : 'side'"
-      [opened]="!(isHandset$ | async)">
-    <mat-toolbar>ANYTIME LIBRARY</mat-toolbar>
-    <mat-nav-list>
-
-      <button mat-button [matMenuTriggerFor]="menu">Menu</button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item>Item 1</button>
-        <button mat-menu-item>Item 2</button>
-      </mat-menu>
-
-      <!--<mat-list-item (click)="menuTrigger.openMenu()">Browse</mat-list-item>-->
-      <!--<mat-list style="margin-left:30px;" #menu="matMenu">-->
-        <!--<mat-list-item>Science</mat-list-item>-->
-        <!--<mat-list-item>Biographies</mat-list-item>-->
-        <!--<mat-list-item>Text books</mat-list-item>-->
-      <!--</mat-list>-->
-      <a mat-list-item href="#">
-        <i class="fa fa-book" aria-hidden="true"></i>
-        <span>Books</span>
-      </a>
-      <a mat-list-item href="#">
-        <i class="fa fa-users" aria-hidden="true"></i>
-        <span>Users</span>
-      </a>
-      <a mat-list-item href="#">
-        <i class="fa fa-sign-out" aria-hidden="true"></i>
-        <span>Sign out</span>
-      </a>
-    </mat-nav-list>
-  </mat-sidenav>
-  <mat-sidenav-content>
+<mat-sidenav-container class="app-sidenav-container">
+  <mat-sidenav #sidenav class="app-sidenav mat-elevation-z10" [opened]="!isScreenSmall()"
+               [mode]="isScreenSmall() ? 'over' : 'side'">
     <mat-toolbar color="primary">
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async">
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-      </button>
-      <!--<span>anytime-library</span>-->
+      Menus
     </mat-toolbar>
-    <!-- Add Content Here -->
-    <router-outlet></router-outlet>
-  </mat-sidenav-content>
+    <mat-list role="list">
+      <mat-list-item role="listitem">Item 1</mat-list-item>
+      <mat-list-item role="listitem">Item 2</mat-list-item>
+      <mat-list-item role="listitem">Item 3</mat-list-item>
+    </mat-list>
+  </mat-sidenav>
+
+  <div class="app-sidenav-content">
+    <app-toolbar></app-toolbar>
+    <div class="wrapper">
+      <router-outlet></router-outlet>
+      <button type="button" mat-button (click)="sidenav.open()">
+        Open sidenav
+      </button>
+    </div>
+  </div>
 </mat-sidenav-container>

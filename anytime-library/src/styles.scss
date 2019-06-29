@@ -1,25 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+//html, body { height: 100%; }
+//body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-@import "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
-.mat-drawer-container {
-  background-color: #ffffff;
-  color: #222222;
+body {
+  margin: 0;
 }
 
-.mat-list-base {
-  .mat-list-item {
-    color: #aaaaaa;
-    span {
-      margin-left: 5px;
-    }
-    &:hover {
-      color: #ffffff;
-    }
-  }
-}
+//.mat-drawer-container {
+//  background-color: #ffffff;
+//  color: #222222;
+//}
+//
+//.mat-list-base {
+//  .mat-list-item {
+//    color: #aaaaaa;
+//    span {
+//      margin-left: 5px;
+//    }
+//    &:hover {
+//      color: #ffffff;
+//    }
+//  }
+//}
 
 
