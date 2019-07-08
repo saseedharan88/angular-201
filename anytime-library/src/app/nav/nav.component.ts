@@ -1,4 +1,6 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { MatSidenav } from '@angular/material';
 
 const SMALL_WIDTH_BREAKPOINT = 720;
 
@@ -9,17 +11,29 @@ const SMALL_WIDTH_BREAKPOINT = 720;
 })
 export class NavComponent implements OnInit {
 
-  private mediaMatcher: MediaQueryList = matchMedia(`(max-width: ${SMALL_WIDTH_BREAKPOINT}px)`);
+    private mediaMatcher: MediaQueryList =
+        matchMedia(`(max-width: ${SMALL_WIDTH_BREAKPOINT}px)`);
 
-  constructor(zone: NgZone) {
-    this.mediaMatcher.addListener(mql =>
-        zone.run(() => this.mediaMatcher = mql));
-  }
+    isDarkTheme: boolean = false;
 
-  ngOnInit() {
-  }
+    constructor(
+        private router: Router) {
+    }
 
-  isScreenSmall(): boolean {
-    return this.mediaMatcher.matches;
-  }
+    @ViewChild(MatSidenav) sidenav: MatSidenav;
+
+    toggleTheme() {
+        this.isDarkTheme = !this.isDarkTheme;
+    }
+
+    ngOnInit() {
+        this.router.events.subscribe(() => {
+            if (this.isScreenSmall())
+                this.sidenav.close();
+        });
+    }
+
+    isScreenSmall(): boolean {
+        return this.mediaMatcher.matches;
+    }
 }

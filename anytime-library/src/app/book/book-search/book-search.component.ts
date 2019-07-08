@@ -4,8 +4,7 @@ import { BookService } from '../service/book.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 export interface DialogData {
-    animal: string;
-    name: string;
+    bookId: string;
 }
 
 @Component({
@@ -19,8 +18,7 @@ export class BookSearchComponent implements OnInit {
   booksVolume: any = [];
   books: any[] = [];
 
-  animal: string;
-  name: string;
+  bookId: string;
   constructor(private fb: FormBuilder, private bookService: BookService, public dialog: MatDialog) { }
 
   ngOnInit() {
@@ -41,12 +39,11 @@ export class BookSearchComponent implements OnInit {
   openDialog(): void {
       const dialogRef = this.dialog.open(BookAddDialogComponent, {
           width: '250px',
-          data: {name: this.name, animal: this.animal}
+          data: {bookId: this.bookId}
       });
 
       dialogRef.afterClosed().subscribe(result => {
           console.log('The dialog was closed');
-          this.animal = result;
       });
   }
 
@@ -59,14 +56,34 @@ export class BookSearchComponent implements OnInit {
     templateUrl: './book-add-details.html',
     styleUrls: ['./book-search.component.scss']
 })
-export class BookAddDialogComponent {
+export class BookAddDialogComponent implements OnInit {
+
+    addToLibraryForm: FormGroup;
 
     constructor(
         public dialogRef: MatDialogRef<BookAddDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+        @Inject(MAT_DIALOG_DATA) public data: DialogData,
+        private fb: FormBuilder,
+        private bookService: BookService) {}
+
+    ngOnInit() {
+        this.addToLibraryForm = this.fb.group({
+            bookId: ['', []],
+            copies: ['', []],
+        });
+    }
 
     onNoClick(): void {
         this.dialogRef.close();
+    }
+
+
+    updateBookCopies() {
+        console.log("this.addToLibraryForm.value:"+this.addToLibraryForm.value);
+        // return this.bookService.searchBooks(this.bookSearchForm.value).subscribe((data: {}) => {
+        //     this.booksVolume = data;
+        //     this.books = this.booksVolume.items;
+        // });
     }
 
 }

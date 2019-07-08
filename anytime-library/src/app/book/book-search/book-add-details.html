@@ -1,11 +1,17 @@
-<h1 mat-dialog-title>Hi {{data.name}}</h1>
+<h1 mat-dialog-title>Add Books to library</h1>
+<form [formGroup]="addToLibraryForm" class="book-add-copies-form">
 <div mat-dialog-content>
-    <p>What's your favorite animal?</p>
-    <mat-form-field>
-        <input matInput >
+    <p>Number of copies</p>
+    <input type="hidden" formControlName="bookId">
+    <mat-form-field class="book-add-copies-form__element">
+        <input type="number" formControlName="copies" matInput placeholder="Copies">
     </mat-form-field>
 </div>
 <div mat-dialog-actions>
-    <button mat-button (click)="onNoClick()">No Thanks</button>
-    <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Ok</button>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <!--<button mat-button [mat-dialog-close]="" cdkFocusInitial (click)="updateBookCopies()">Add</button>-->
+    <button (click)="updateBookCopies()" class="book-add-copies-form__mat_icon" mat-flat-button color="primary" aria-label="Add">
+        Add
+    </button>
 </div>
+</form>
