@@ -1,17 +1,13 @@
-<h1 mat-dialog-title>Add Books to library</h1>
+<h1 mat-dialog-title>Book status</h1>
 <form [formGroup]="addToLibraryForm" class="book-add-copies-form">
-<div mat-dialog-content>
-    <p>Number of copies</p>
-    <input type="hidden" formControlName="bookId">
-    <mat-form-field class="book-add-copies-form__element">
-        <input type="number" formControlName="copies" matInput placeholder="Copies">
-    </mat-form-field>
-</div>
-<div mat-dialog-actions>
-    <button mat-button (click)="onNoClick()">Cancel</button>
-    <!--<button mat-button [mat-dialog-close]="" cdkFocusInitial (click)="updateBookCopies()">Add</button>-->
-    <button (click)="updateBookCopies()" class="book-add-copies-form__mat_icon" mat-flat-button color="primary" aria-label="Add">
-        Add
-    </button>
-</div>
+    <div mat-dialog-content>
+        <p>Availability Status: {{ data.copies }} Copies already Available</p>
+        <mat-form-field class="book-add-copies-form__element">
+            <input type="number" formControlName="copies" matInput placeholder="Copies">
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-button (click)="onNoClick()">Cancel</button>
+        <button (click)="updateBookCopies()" class="book-add-copies-form__mat_icon" mat-button color="primary" aria-label="Add" cdkFocusInitial>Add / Update</button>
+    </div>
 </form>

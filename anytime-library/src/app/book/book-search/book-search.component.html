@@ -44,9 +44,8 @@
         {{ cat }}<span *ngIf="!isLast">,</span>
       </span>
     </mat-card-subtitle>
-    <p>Make this ID : {{ book.id }}</p>
-    <button (click)="openDialog()" class="" mat-raised-button color="primary" aria-label="Search">
-      <mat-icon>library_add</mat-icon>
+    <button (click)="openDialog(book.id)" class="" mat-raised-button color="primary" aria-label="More details">More details
+      <!--<mat-icon>library_add</mat-icon>-->
     </button>
     <!--<mat-card-content class="book-detail__content">-->
       <!--<p *ngIf="book.volumeInfo.description">{{ book.volumeInfo.description }}</p>-->
