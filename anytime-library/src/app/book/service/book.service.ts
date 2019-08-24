@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams, HttpHeaders} from '@angular/common/http';
-import {Book, BooksVolume} from '../book';
+import {Author, Book } from '../book';
 import {Observable, throwError} from 'rxjs';
 import {retry, catchError} from 'rxjs/operators';
 import {AppConstants} from '../../appConstants';
+// import {forEach} from "@angular/router/src/utils/collection";
 
 const headers = new HttpHeaders({
   'Content-type': 'application/json',
@@ -62,7 +63,22 @@ export class BookService {
 
   // Update book details to mongodb.
   updateBookDetails(args): Observable<any> {
-    return this.http.post<any>(this.apiUrl + '/update-book-details', args, {headers: headers})
+
+    console.log("args:: "+JSON.stringify(args));
+    const bookDetail = new Book();
+    bookDetail.bookId = args.bookId;
+    bookDetail.copies = args.copies;
+    const authors = [];
+    args.authors.forEach((value) => {
+      const author = new Author();
+      author.name = value;
+      authors.push(author);
+    });
+    bookDetail.authors = authors;
+    // bookDetail.genre = args.genre;
+    console.log("args bk:: "+JSON.stringify(bookDetail));
+
+    return this.http.post<any>(this.apiUrl + '/update-book-details', bookDetail, {headers: headers})
       .pipe(
         catchError(this.handleError)
       );

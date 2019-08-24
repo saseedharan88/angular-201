@@ -110,7 +110,7 @@ app.get('/search-books', (req, res) => {
 
 // Get book inventory details.
 app.get('/book/inventory/details', (req, res) => {
-  console.log("req.bookId : "+req.query.bookId)
+  // console.log("req.bookId : "+req.query.bookId)
   // Find book with a matching bookId
   let query = Book.findOne({ 'bookId': req.query.bookId });
   // selecting the `copies` and `bookId` fields.
@@ -160,15 +160,41 @@ app.post('/addbook', (req, res) => {
 // Update Book details service.
 app.post('/update-book-details', (req, res) => {
   let bookDetails = req.body;
-  // console.log("bookDetails: " + bookDetails.copies)
-  // console.log("bookId: " + bookDetails.bookId)
-  let book = new Book(bookDetails)
-  book.save((err, result) => {
-    if (err)
-      res.send(err.message)
-    console.log("result: " + JSON.stringify(result))
-    res.send(result)
-  })
+  let query = Book.findOne({ 'bookId': bookDetails.bookId });
+  query.select('bookId');
+  query.exec(function (err, book) {
+    if (err) {
+      res.send(res.send({ success: false, message: "Some error occurred " + err.message }))
+    }
+    else {
+      if (book !== null) {
+        // Book details already exists.
+        let query = { 'bookId': bookDetails.bookId };
+        let options = {new: true};
+        Book.findOneAndUpdate(query, bookDetails, options, function(err, book) {
+          if (err) {
+            res.send({ success: false, message: "Some error occurred " + err.message })
+          }
+          res.send({ success: true, message: "Successfully Saved !!", data: book })
+        });
+      }
+      else {
+        // Insert new book details.
+        let book = new Book(bookDetails)
+        book.save((err, result) => {
+          if (err) {
+            res.send({ success: false, message: "Some error occurred " + err.message })
+          }
+          res.send({ success: true, message: "Successfully Saved !!", data: result })
+        })
+
+        // Get the subject data from google API.
+
+
+        // Get the author data from google API.
+      }
+    }
+  });
 })
 
 

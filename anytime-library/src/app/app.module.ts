@@ -10,12 +10,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { MaterialModule } from './shared/material.module';
 import { AdminModule } from './admin/admin.module';
 import { RegisterComponent } from './register/register.component';
-import { PrimaryNavComponent } from './primary-nav/primary-nav.component';
-import { LayoutComponent } from './layout/layout.component';
-import { HeaderComponent } from './navigation/header/header.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
-import { SearchComponent } from './navigation/search/search.component';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 
 import { BookModule } from './book/book.module';
@@ -29,11 +24,6 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     AppComponent,
     NavComponent,
     RegisterComponent,
-    PrimaryNavComponent,
-    LayoutComponent,
-    HeaderComponent,
-    SidenavListComponent,
-    SearchComponent,
     PagenotfoundComponent,
     WelcomeComponent,
     ToolbarComponent

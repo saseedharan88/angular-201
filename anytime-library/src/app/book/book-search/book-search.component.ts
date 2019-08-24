@@ -5,6 +5,9 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 
 export interface DialogData {
   bookId: string;
+  copies: string;
+  genre: any;
+  authors: any;
 }
 
 @Component({
@@ -38,13 +41,20 @@ export class BookSearchComponent implements OnInit {
     });
   }
 
-  openDialog(bookId): void {
+  openDialog(bookId, volumeInfo): void {
     // Fetch book details from database.
+    console.log("Subjects: "+JSON.stringify(volumeInfo.categories));
+    console.log("Authors: "+JSON.stringify(volumeInfo.authors));
     this.bookService.getBookDetails(bookId).subscribe((data: {}) => {
-      this.book = data;
+      let copies = 0;
+      if (data !== null && Object.keys(data).length !== 0) {
+        // Book details available.
+        this.book = data;
+        copies = this.book.copies;
+      }
       const dialogRef = this.dialog.open(BookAddDialogComponent, {
         width: '600px',
-        data: {bookId: bookId, copies: this.book.copies}
+        data: {bookId: bookId, copies: copies, genre: volumeInfo.categories, authors: volumeInfo.authors}
       });
 
       dialogRef.afterClosed().subscribe(result => {
@@ -66,6 +76,8 @@ export class BookSearchComponent implements OnInit {
 export class BookAddDialogComponent implements OnInit {
 
   addToLibraryForm: FormGroup;
+  message: string;
+  success: boolean;
 
   constructor(
     public dialogRef: MatDialogRef<BookAddDialogComponent>,
@@ -77,7 +89,9 @@ export class BookAddDialogComponent implements OnInit {
   ngOnInit() {
     this.addToLibraryForm = this.fb.group({
       bookId: [this.data.bookId, []],
-      copies: ['', []],
+      copies: [this.data.copies, []],
+      genre: [this.data.genre, []],
+      authors: [this.data.authors, []],
     });
   }
 
@@ -87,10 +101,16 @@ export class BookAddDialogComponent implements OnInit {
 
 
   updateBookCopies() {
-    console.log("ss:"+JSON.stringify(this.addToLibraryForm.value));
-    return this.bookService.updateBookDetails(this.addToLibraryForm.value).subscribe((data: {}) => {
-      console.log('data: ' + data);
+    return this.bookService.updateBookDetails(this.addToLibraryForm.value).subscribe((data: any) => {
+      console.log("data: " + JSON.stringify(data));
+      this.data = data.data;
+      this.message = data.message;
+      this.success = data.success;
     });
+  }
+
+  closeAlert() {
+    this.success = false;
   }
 
 }

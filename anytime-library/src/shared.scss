@@ -1,0 +1,15 @@
+@import "~breakpoint-sass/stylesheets/breakpoint";
+
+// Breakpoints ///////////////
+// usage: `@include breakpoint($small) {}`
+$screen: "only screen" !default;
+$small-min: 375px !default;
+$small-max: 767px !default;
+$medium-large: 1023px !default;
+$xlarge: 1399px !default;
+
+$up-sm: $screen max-width $small-max; // mobile (max-with:767px)
+$up-medium: $screen $small-max + 1; // ipad (min-with:768px)
+$medium: $screen $medium-large + 1; // desktop (min-with:1024px)
+$large: $screen $xlarge + 1; //large (min-with:1400px)
+$up-large: $screen $xlarge + 2; //large (min-with:1401px)

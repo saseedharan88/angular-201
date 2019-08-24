@@ -44,7 +44,7 @@
         {{ cat }}<span *ngIf="!isLast">,</span>
       </span>
     </mat-card-subtitle>
-    <button (click)="openDialog(book.id)" class="" mat-raised-button color="primary" aria-label="More details">More details
+    <button (click)="openDialog(book.id, book.volumeInfo)" class="" mat-raised-button color="primary" aria-label="More details">More details
       <!--<mat-icon>library_add</mat-icon>-->
     </button>
     <!--<mat-card-content class="book-detail__content">-->

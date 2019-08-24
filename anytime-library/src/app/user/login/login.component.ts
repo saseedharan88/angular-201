@@ -13,12 +13,15 @@ import { GoogleLoginProvider, FacebookLoginProvider, LinkedInLoginProvider } fro
 export class LoginComponent implements OnInit {
 
   user: SocialUser;
+  loggedIn: boolean;
+  loginData = {}
 
   constructor(private userService: UserService, private authService: AuthService) { }
 
   ngOnInit() {
     this.authService.authState.subscribe((user) => {
       this.user = user;
+      this.loggedIn = (user != null);
     });
   }
 
@@ -32,6 +35,11 @@ export class LoginComponent implements OnInit {
 
   signOut(): void {
     this.authService.signOut();
+  }
+
+  post() {
+    console.log(this.loginData);
+    this.userService.registerUser(this.loginData);
   }
 
 }

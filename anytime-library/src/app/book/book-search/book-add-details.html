@@ -1,9 +1,19 @@
 <h1 mat-dialog-title>Book status</h1>
 <form [formGroup]="addToLibraryForm" class="book-add-copies-form">
     <div mat-dialog-content>
-        <p>Availability Status: {{ data.copies }} Copies already Available</p>
+
+        <div class="alert" *ngIf="success" [ngClass]="success == true ? 'success': ''">
+            <span class="closebtn" (click)="closeAlert()">&times;</span>{{ message }}
+        </div>
+
+        <!--<div class="book-add-copies-form-message book-add-copies-form-message-error">-->
+            <!--<mat-icon>error_outline</mat-icon><p>{{  }}{{ message }} This is test !!</p>-->
+        <!--</div>-->
+        <!--<mat-card class="book-add-copies-form-message book-add-copies-form-message-success">-->
+            <!--<mat-icon>done_all</mat-icon><span>{{ success }}{{ message }} This is test !!</span>-->
+        <!--</mat-card>-->
         <mat-form-field class="book-add-copies-form__element">
-            <input type="number" formControlName="copies" matInput placeholder="Copies">
+            <input type="number" formControlName="copies" matInput placeholder="{{ data.copies }} Copies already Available">
         </mat-form-field>
     </div>
     <div mat-dialog-actions>

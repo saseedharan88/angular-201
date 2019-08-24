@@ -1,3 +1,31 @@
+@import "../../../shared";
+
 .login-card {
-  max-width: 400px;
+  margin: auto;
+  &__or_separator {
+    padding: 5% 0 5% 50%;
+  }
+  @include breakpoint($up-medium) {
+    width: 60%;
+  }
+  @include breakpoint($medium) {
+    width: 60%;
+  }
+  @include breakpoint($large) {
+    width: 60%;
+  }
+  @include breakpoint($small-max) {
+    width: 60%;
+  }
+  @include breakpoint($small-min) {
+    width: 60%;
+  }
+}
+
+.login-form {
+  width: 100%;
+}
+
+.login-full-width {
+  width: 100%;
 }
