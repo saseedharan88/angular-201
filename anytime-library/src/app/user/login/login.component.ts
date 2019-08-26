@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
 
   post() {
     console.log(this.loginData);
-    this.userService.registerUser(this.loginData);
+    this.userService.loginUser(this.loginData);
   }
 
 }

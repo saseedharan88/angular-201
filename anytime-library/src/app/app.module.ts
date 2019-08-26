@@ -9,7 +9,6 @@ import { NavComponent } from './nav/nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MaterialModule } from './shared/material.module';
 import { AdminModule } from './admin/admin.module';
-import { RegisterComponent } from './register/register.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 
@@ -23,7 +22,6 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
   declarations: [
     AppComponent,
     NavComponent,
-    RegisterComponent,
     PagenotfoundComponent,
     WelcomeComponent,
     ToolbarComponent

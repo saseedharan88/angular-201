@@ -10,8 +10,9 @@ const express = require('express'),
   cookieSession = require('cookie-session'),
   session = require('express-session'),
   auth = require('./auth'),
+  jwt = require('jwt-simple'),
   Book = require('./models/Book.js')
-User = require('./models/User.js');
+  User = require('./models/User.js');
 
 var books = [
   {isbn: 'abcdef', book_name: 'Data structures'},
@@ -134,6 +135,24 @@ app.post('/register', (req, res) => {
     res.sendStatus(200)
   })
   // res.sendStatus(200)
+})
+
+// User login service.
+app.post('/login', async (req, res) => {
+  var userData = req.body;
+
+  var user = await User.findOne({email: userData.email});
+
+  if (!user)
+    return res.status(401).send({message: 'Email or Password is invalid'})
+
+  if (userData.password != user.password )
+    return res.status(401).send({message: 'Password is invalid'})
+
+  var payload = {}
+
+  var token = jwt.encode(payload, '123')
+  res.status(200).send({token})
 })
 
 // Add Book service.
