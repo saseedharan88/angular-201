@@ -9,7 +9,7 @@ const TOKEN = 'TOKEN';
 })
 export class UserService {
 
-  googleForm: any;
+  path = 'http://localhost:3000/auth';
 
   setToken(token: string): void {
     localStorage.setItem(TOKEN, token);
@@ -22,13 +22,13 @@ export class UserService {
   constructor(private http: HttpClient, private router: Router) { }
 
   registerUser(registerData) {
-    this.http.post('http://localhost:3000/register', registerData).subscribe(res => {
+    this.http.post(this.path + '/register', registerData).subscribe(res => {
       console.log(res);
     });
   }
 
   loginUser(loginData) {
-    this.http.post('http://localhost:3000/login', loginData).subscribe(res => {
+    this.http.post(this.path + '/login', loginData).subscribe(res => {
      if (res['token']) {
        this.setToken(res['token']);
        this.router.navigateByUrl('/welcome');

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {UserService} from '../service/user.service';
+import { UserService } from '../service/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -9,7 +10,11 @@ import {UserService} from '../service/user.service';
 export class RegisterComponent implements OnInit {
   registerData = {}
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private router: Router) {
+    if (this.userService.isLoggedIn) {
+      this.router.navigate(['/welcome']);
+    }
+  }
 
   ngOnInit() {
   }

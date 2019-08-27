@@ -4,6 +4,7 @@ import { UserService } from '../service/user.service';
 import { AuthService } from 'angularx-social-login';
 import { SocialUser } from 'angularx-social-login';
 import { GoogleLoginProvider, FacebookLoginProvider, LinkedInLoginProvider } from 'angularx-social-login';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,11 @@ export class LoginComponent implements OnInit {
   loggedIn: boolean;
   loginData = {}
 
-  constructor(private userService: UserService, private authService: AuthService) { }
+  constructor(private userService: UserService, private authService: AuthService, private router: Router) {
+    if (this.userService.isLoggedIn) {
+      this.router.navigate(['/welcome']);
+    }
+  }
 
   ngOnInit() {
     this.authService.authState.subscribe((user) => {

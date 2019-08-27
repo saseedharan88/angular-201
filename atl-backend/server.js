@@ -1,18 +1,15 @@
-const express = require('express'),
-  app = express(),
-  passport = require('passport'),
-  router = express.Router(),
-  cors = require('cors'),
-  bodyParser = require('body-parser'),
-  mongoose = require('mongoose'),
-  https = require('https'),
-  cookieParser = require('cookie-parser'),
-  cookieSession = require('cookie-session'),
-  session = require('express-session'),
-  auth = require('./auth'),
-  jwt = require('jwt-simple'),
-  Book = require('./models/Book.js')
-  User = require('./models/User.js');
+var express = require('express')
+var app = express()
+var cors = require('cors')
+var bodyParser = require('body-parser')
+var mongoose = require('mongoose')
+var https = require('https')
+var cookieParser = require('cookie-parser')
+var cookieSession = require('cookie-session')
+var session = require('express-session')
+var Book = require('./models/Book.js')
+var User = require('./models/User.js')
+var auth = require('./auth')
 
 var books = [
   {isbn: 'abcdef', book_name: 'Data structures'},
@@ -23,22 +20,12 @@ var books = [
 const GOOGLE_API = 'AIzaSyD41fpvX5zgAuYb2Y4ETOdcQKUVGYIj-Qg';
 app.use(cors())
 app.use(bodyParser.json())
-// Google Authentication.
-auth(passport);
-app.use(passport.initialize());
 app.use(cookieSession({
   name: 'session',
   keys: ['123'],
   maxAge: 24 * 60 * 60 * 1000
 }));
 app.use(cookieParser());
-
-// app.use(session({
-//   secret: 's3cr3t',
-//   resave: true,
-//   saveUninitialized: true
-// }));
-// app.use(passport.session());
 
 app.get('/', (req, res) => {
   if (req.session.token) {
@@ -53,21 +40,6 @@ app.get('/', (req, res) => {
     });
   }
 })
-
-app.get('/auth/google', passport.authenticate('google', {
-  scope: ['https://www.googleapis.com/auth/userinfo.profile']
-}));
-
-app.get('/auth/google/callback',
-  passport.authenticate('google', {
-    failureRedirect: '/'
-  }),
-  (req, res) => {
-    console.log(req.user.token);
-    req.session.token = req.user.token;
-    res.redirect('/');
-  }
-);
 
 app.get('/logout', (req, res) => {
   req.logout();
@@ -122,37 +94,6 @@ app.get('/book/inventory/details', (req, res) => {
       res.send(err.message)
     res.send(book)
   });
-})
-
-// User register service.
-app.post('/register', (req, res) => {
-  var userData = req.body;
-
-  var user = new User(userData);
-  user.save((err, result) => {
-    if (err)
-      console.log("Error in registering a user." + err)
-    res.sendStatus(200)
-  })
-  // res.sendStatus(200)
-})
-
-// User login service.
-app.post('/login', async (req, res) => {
-  var userData = req.body;
-
-  var user = await User.findOne({email: userData.email});
-
-  if (!user)
-    return res.status(401).send({message: 'Email or Password is invalid'})
-
-  if (userData.password != user.password )
-    return res.status(401).send({message: 'Password is invalid'})
-
-  var payload = {}
-
-  var token = jwt.encode(payload, '123')
-  res.status(200).send({token})
 })
 
 // Add Book service.
@@ -217,18 +158,34 @@ app.post('/update-book-details', (req, res) => {
 })
 
 
+// Get list of users.
+app.get('/users', async (req, res) => {
+  try {
+    var users = await User.find({}, '-password -__v')
+    res.send(users)
+  } catch (error) {
+    console.log("Error in getting users")
+    res.sendStatus(500)
+  }
+})
+
+
 //Set up mongoose connection
 //var mongoDB = 'mongodb://atluser:jKiRsnG4rdvkFU0m@cluster0-shard-00-00-r9ag9.mongodb.net:27017,cluster0-shard-00-01-r9ag9.mongodb.net:27017,cluster0-shard-00-02-r9ag9.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true';
 
 var mongoDB = 'mongodb://127.0.0.1:27017/atldb';
 mongoose.connect(mongoDB, {useNewUrlParser: true}, (err) => {
   console.log('attempt connected to mongo !!');
-  if (!err)
+  if (!err) {
     console.log('connected to mongo !!');
-  console.log("err:" + err);
+  }
+  else {
+    console.log("Connection error:" + err);
+  }
 });
 // mongoose.Promise = global.Promise;
 // var db = mongoose.connection;
 // db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
+app.use('/auth', auth)
 app.listen(3000)
