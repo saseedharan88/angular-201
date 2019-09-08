@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams, HttpHeaders} from '@angular/common/http';
-import {Author, Book } from '../book';
+import {Author, Book, Genre } from '../book';
 import {Observable, throwError} from 'rxjs';
 import {retry, catchError} from 'rxjs/operators';
 import {AppConstants} from '../../appConstants';
@@ -75,9 +75,20 @@ export class BookService {
       authors.push(author);
     });
     bookDetail.authors = authors;
-    // bookDetail.genre = args.genre;
+    const genres = [];
+    args.genre.forEach((value) => {
+      const genre = new Genre();
+      genre.name = value;
+      genres.push(genre);
+    });
+    bookDetail.genre = genres;
+    bookDetail.title = args.title;
+    bookDetail.subtitle = args.subtitle;
+    bookDetail.publisher = args.publisher;
+    bookDetail.publishedDate = args.publishedDate;
+    bookDetail.description = args.description;
+    bookDetail.thumbnail = args.thumbnail;
     console.log("args bk:: "+JSON.stringify(bookDetail));
-
     return this.http.post<any>(this.apiUrl + '/update-book-details', bookDetail, {headers: headers})
       .pipe(
         catchError(this.handleError)

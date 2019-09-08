@@ -7,7 +7,7 @@ var https = require('https')
 var cookieParser = require('cookie-parser')
 var cookieSession = require('cookie-session')
 var session = require('express-session')
-var Book = require('./models/Book.js')
+var dbschema = require('./models/dbschema')
 var User = require('./models/User.js')
 var auth = require('./auth')
 
@@ -83,12 +83,24 @@ app.get('/search-books', (req, res) => {
 
 // Get book inventory details.
 app.get('/book/inventory/details', (req, res) => {
-  // console.log("req.bookId : "+req.query.bookId)
+  console.log("req.bookId : "+req.query.bookId)
   // Find book with a matching bookId
-  let query = Book.findOne({ 'bookId': req.query.bookId });
+  let query = dbschema.Book.findOne({ 'bookId': req.query.bookId });
   // selecting the `copies` and `bookId` fields.
   query.select('copies bookId');
   // execute the query at a later time.
+  query.exec(function (err, book) {
+    if (err)
+      res.send(err.message)
+    res.send(book)
+  });
+})
+
+
+// Get all books from application database.
+app.get('/library/books', (req, res) => {
+  let query = dbschema.Book.find();
+  query.select('copies bookId subject');
   query.exec(function (err, book) {
     if (err)
       res.send(err.message)
@@ -109,7 +121,7 @@ app.post('/addbook', (req, res) => {
 
   console.log("In adding a book." + bookData.isbn + " / " + bookData.book_name)
   // res.sendStatus(200)
-  var book = new Book(bookData)
+  var book = new dbschema.Book(bookData)
   book.save((err, result) => {
     if (err)
       console.log("Error in adding a book." + err)
@@ -118,43 +130,46 @@ app.post('/addbook', (req, res) => {
 })
 
 // Update Book details service.
-app.post('/update-book-details', (req, res) => {
+app.post('/update-book-details', async (req, res) => {
   let bookDetails = req.body;
-  let query = Book.findOne({ 'bookId': bookDetails.bookId });
-  query.select('bookId');
-  query.exec(function (err, book) {
+  let bookId = bookDetails.bookId;
+  let book = new dbschema.Book()
+
+  // Check if book details already exists.
+  let whereClause = { 'bookId': bookId };
+  let bookDoc = await dbschema.Book.findOne(whereClause)
+  if (bookDoc !== null) {
+    // Book already exists.
+    book = bookDoc
+    book.bookId = bookId;
+  }
+  // Prepare Book details.
+  let authors = []
+  bookDetails.authors.forEach(function(element) {
+    authors.push(new dbschema.Author(element))
+  })
+  let subjects = []
+  bookDetails.genre.forEach(function(element) {
+    subjects.push(new dbschema.Subject(element))
+  })
+  book.copies = bookDetails.copies
+  book.authors = authors
+  book.subjects = subjects
+  book.title = bookDetails.title
+  book.subtitle = bookDetails.subtitle
+  book.publisher = bookDetails.publisher
+  book.publishedDate = bookDetails.publishedDate
+  book.description = bookDetails.description
+  book.thumbnail = bookDetails.thumbnail
+
+  console.log("Src : " + JSON.stringify(bookDetails))
+  console.log("Just before save : " + JSON.stringify(book))
+  book.save((err, result) => {
     if (err) {
-      res.send(res.send({ success: false, message: "Some error occurred " + err.message }))
+      res.send({ success: false, message: "Some error occurred " + err.message })
     }
-    else {
-      if (book !== null) {
-        // Book details already exists.
-        let query = { 'bookId': bookDetails.bookId };
-        let options = {new: true};
-        Book.findOneAndUpdate(query, bookDetails, options, function(err, book) {
-          if (err) {
-            res.send({ success: false, message: "Some error occurred " + err.message })
-          }
-          res.send({ success: true, message: "Successfully Saved !!", data: book })
-        });
-      }
-      else {
-        // Insert new book details.
-        let book = new Book(bookDetails)
-        book.save((err, result) => {
-          if (err) {
-            res.send({ success: false, message: "Some error occurred " + err.message })
-          }
-          res.send({ success: true, message: "Successfully Saved !!", data: result })
-        })
-
-        // Get the subject data from google API.
-
-
-        // Get the author data from google API.
-      }
-    }
-  });
+    res.send({ success: true, message: "Successfully Saved !!", data: result })
+  })
 })
 
 
@@ -170,10 +185,24 @@ app.get('/users', async (req, res) => {
 })
 
 
-//Set up mongoose connection
-//var mongoDB = 'mongodb://atluser:jKiRsnG4rdvkFU0m@cluster0-shard-00-00-r9ag9.mongodb.net:27017,cluster0-shard-00-01-r9ag9.mongodb.net:27017,cluster0-shard-00-02-r9ag9.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true';
+// Book issue register.
+app.post('/issue-register', (req, res) => {
+  var issueRegisterData = req.body;
+  var issueRegister = new dbschema.IssueRegister(issueRegisterData);
+  issueRegister.save((err, result) => {
+    if (err)
+      res.status(401).send({message: 'Could not able to issue, some error occurred : ' + err})
+    res.status(200).send({message: 'Successfully Issue the Book !!'})
+  })
+})
 
+
+
+//Set up mongoose connection
+// var mongoDB = 'mongodb://admin:admin@cluster0-shard-00-00-r9ag9.mongodb.net:27017,cluster0-shard-00-01-r9ag9.mongodb.net:27017,cluster0-shard-00-02-r9ag9.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true';
 var mongoDB = 'mongodb://127.0.0.1:27017/atldb';
+// var mongoDB = 'mongodb://admin:hT7XfP6l6RGZkqEl@main-shard-00-00-03xkr.mongodb.net:27017,main-shard-00-01-03xkr.mongodb.net:27017,main-shard-00-02-03xkr.mongodb.net:27017/main?ssl=true&replicaSet=Main-shard-0&authSource=admin&retryWrites=true';
+// var mongoDB =  'mongodb+srv://admin:admin@cluster0-ix1h1.mongodb.net/test?retryWrites=true&w=majority';
 mongoose.connect(mongoDB, {useNewUrlParser: true}, (err) => {
   console.log('attempt connected to mongo !!');
   if (!err) {

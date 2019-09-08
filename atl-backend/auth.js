@@ -19,10 +19,12 @@ router.post('/register', (req, res) => {
 router.post('/login', async (req, res) => {
   var loginData = req.body;
   var user = await User.findOne({email: loginData.email});
+  console.log("from db user: " + user.email + " = " + user.password);
   if (!user)
     res.status(401).send({message: 'Email or Password is invalid'})
-
   bcrypt.compare(loginData.password, user.password, (err, isMatch) => {
+    if (err)
+      res.status(401).send({message: 'Error in checking ' + err})
     if (!isMatch)
       res.status(401).send({message: 'Password is invalid'})
     var payload = {}

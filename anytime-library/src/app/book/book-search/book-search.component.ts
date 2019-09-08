@@ -8,6 +8,12 @@ export interface DialogData {
   copies: string;
   genre: any;
   authors: any;
+  title: string;
+  subtitle: string;
+  publisher: string;
+  publishedDate: string;
+  description: string;
+  thumbnail: string;
 }
 
 @Component({
@@ -54,7 +60,18 @@ export class BookSearchComponent implements OnInit {
       }
       const dialogRef = this.dialog.open(BookAddDialogComponent, {
         width: '600px',
-        data: {bookId: bookId, copies: copies, genre: volumeInfo.categories, authors: volumeInfo.authors}
+        data: {
+          bookId: bookId,
+          copies: copies,
+          genre: volumeInfo.categories,
+          authors: volumeInfo.authors,
+          title: volumeInfo.title,
+          subtitle: volumeInfo.subtitle,
+          publisher: volumeInfo.publisher,
+          publishedDate: volumeInfo.publishedDate,
+          description: volumeInfo.description,
+          thumbnail: volumeInfo.imageLinks.thumbnail
+        }
       });
 
       dialogRef.afterClosed().subscribe(result => {
@@ -92,6 +109,12 @@ export class BookAddDialogComponent implements OnInit {
       copies: [this.data.copies, []],
       genre: [this.data.genre, []],
       authors: [this.data.authors, []],
+      title: [this.data.title, []],
+      subtitle: [this.data.subtitle, []],
+      publisher: [this.data.publisher, []],
+      publishedDate: [this.data.publishedDate, []],
+      description: [this.data.description, []],
+      thumbnail: [this.data.thumbnail, []],
     });
   }
 
