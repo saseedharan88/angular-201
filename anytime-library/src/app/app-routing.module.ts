@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { WelcomeComponent } from './welcome/welcome.component';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 import { AuthGuard } from './user/auth.guard';
+import { BooksComponent } from './book/books/books.component';
 
 const routes: Routes = [
-    { path: 'welcome', canActivate: [AuthGuard], component: WelcomeComponent },
-    { path: '', redirectTo: 'welcome', pathMatch: 'full' },
+    { path: 'books', canActivate: [AuthGuard], component: BooksComponent },
+    { path: '', redirectTo: 'books', pathMatch: 'full' },
     { path: '**', component: PagenotfoundComponent }
 ];
 

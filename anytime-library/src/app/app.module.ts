@@ -8,13 +8,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavComponent } from './nav/nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MaterialModule } from './shared/material.module';
-import { AdminModule } from './admin/admin.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 
 import { BookModule } from './book/book.module';
 import { UserModule } from './user/user.module';
-import { WelcomeComponent } from './welcome/welcome.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 
 
@@ -23,13 +21,11 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     AppComponent,
     NavComponent,
     PagenotfoundComponent,
-    WelcomeComponent,
     ToolbarComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    AdminModule,
     BookModule,
     UserModule,
     BrowserAnimationsModule,

@@ -14,28 +14,13 @@ const headers = new HttpHeaders({
   providedIn: 'root'
 })
 export class BookService {
-  books: any = [];
+  books: Array<Book> = [];
+  filterList: Array<string> = [];
   apiUrl: string;
 
   constructor(private http: HttpClient) {
     this.apiUrl = AppConstants.apiUrl;
   }
-
-  getBooks() {
-    return this.http.get(this.apiUrl + '/books').subscribe((res: {}) => {
-      console.log('Res:' + res);
-      this.books = res;
-    });
-  }
-
-  // searchBooks(args) {
-  //     const headers = new Headers();
-  //     headers.append('Content-Type', 'application/json');
-  //     const params = new HttpParams().set('isbn', args.isbn).set('title', args.title).set('author', args.author);
-  //     return this.http.get('http://55.55.55.5:3000/search-books', { params: params }).subscribe((res: {}) => {
-  //         this.books = res;
-  //     });
-  // }
 
   // Error handling.
   handleError(error) {
@@ -51,10 +36,34 @@ export class BookService {
     return throwError(errorMessage);
   }
 
-  // HttpClient API get() method => Search books.
+  // Get Subjects.
+  getSubjects() {
+    return this.http.get(this.apiUrl + '/library/subjects').subscribe((res: any) => {
+      this.filterList = res;
+    });
+  }
+
+  // Get Authors.
+  getAuthors() {
+    return this.http.get(this.apiUrl + '/library/authors').subscribe((res: any) => {
+      this.filterList = res;
+    });
+  }
+
+  // Get Books.
+  getBooks(filterBy, filterValue): Observable<any> {
+    const httpParams = new HttpParams().set('filterBy', filterBy).set('filterValue', filterValue);
+    return this.http.get(this.apiUrl + '/library/books', {params: httpParams})
+      .pipe(
+        retry(1),
+        catchError(this.handleError)
+      );
+  }
+
+  // Search books in google book library.
   searchBooks(args): Observable<any> {
-    const params = new HttpParams().set('isbn', args.isbn).set('title', args.title).set('author', args.author);
-    return this.http.get(this.apiUrl + '/search-books', {params: params})
+    const httpParams = new HttpParams().set('isbn', args.isbn).set('title', args.title).set('author', args.author);
+    return this.http.get(this.apiUrl + '/search-books', {params: httpParams})
       .pipe(
         retry(1),
         catchError(this.handleError)
@@ -68,20 +77,24 @@ export class BookService {
     const bookDetail = new Book();
     bookDetail.bookId = args.bookId;
     bookDetail.copies = args.copies;
-    const authors = [];
-    args.authors.forEach((value) => {
-      const author = new Author();
-      author.name = value;
-      authors.push(author);
-    });
-    bookDetail.authors = authors;
-    const genres = [];
-    args.genre.forEach((value) => {
-      const genre = new Genre();
-      genre.name = value;
-      genres.push(genre);
-    });
-    bookDetail.genre = genres;
+    if (args.authors !== null) {
+      const authors = [];
+      args.authors.forEach((value) => {
+        const author = new Author();
+        author.name = value;
+        authors.push(author);
+      });
+      bookDetail.authors = authors;
+    }
+    if (args.genre !== null) {
+      const genres = [];
+      args.genre.forEach((value) => {
+        const genre = new Genre();
+        genre.name = value;
+        genres.push(genre);
+      });
+      bookDetail.genre = genres;
+    }
     bookDetail.title = args.title;
     bookDetail.subtitle = args.subtitle;
     bookDetail.publisher = args.publisher;

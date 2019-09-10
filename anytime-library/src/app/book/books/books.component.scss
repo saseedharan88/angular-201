@@ -1,0 +1,20 @@
+.books-component-wrapper {
+  &__title {
+    font-family: Roboto;
+    font-size: 20px;
+    color: #354C8C;
+    margin-left: 50px;
+  }
+}
+.book-list-view {
+  margin: 0 auto;
+  &__book_item {
+    display: inline-block;
+    vertical-align: top;
+    margin: 10px 10px;
+    img {
+      width: 120px;
+      height: 150px;
+    }
+  }
+}

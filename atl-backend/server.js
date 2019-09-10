@@ -47,10 +47,6 @@ app.get('/logout', (req, res) => {
   res.redirect('/');
 });
 
-app.get('/books', (req, res) => {
-  res.send(books)
-})
-
 app.get('/search-books', (req, res) => {
   var searchQuery = "";
   if (req.query.isbn != "") {
@@ -96,11 +92,38 @@ app.get('/book/inventory/details', (req, res) => {
   });
 })
 
+// Get all unique subjects from database.
+app.get('/library/subjects', (req, res) => {
+  let query = dbschema.Book.distinct("subjects.name");
+  query.exec(function (err, subjects) {
+    if (err)
+      res.send(err.message)
+    res.send(subjects)
+  });
+})
+
+// Get all unique authors from database.
+app.get('/library/authors', (req, res) => {
+  let query = dbschema.Book.distinct("authors.name");
+  query.exec(function (err, authors) {
+    if (err)
+      res.send(err.message)
+    res.send(authors)
+  });
+})
 
 // Get all books from application database.
 app.get('/library/books', (req, res) => {
   let query = dbschema.Book.find();
-  query.select('copies bookId subject');
+  let filterBy = req.query.filterBy;
+  let filterValue = req.query.filterValue;
+  console.log("Outside if: " + filterBy);
+  console.log("Outside if 2: " + filterValue);
+  if (filterBy !== ""  && filterValue !== "") {
+    console.log("Inside if");
+    query = dbschema.Book.find()
+      .where(filterBy + ".name").equals(filterValue);
+  }
   query.exec(function (err, book) {
     if (err)
       res.send(err.message)
@@ -144,23 +167,29 @@ app.post('/update-book-details', async (req, res) => {
     book.bookId = bookId;
   }
   // Prepare Book details.
-  let authors = []
-  bookDetails.authors.forEach(function(element) {
-    authors.push(new dbschema.Author(element))
-  })
-  let subjects = []
-  bookDetails.genre.forEach(function(element) {
-    subjects.push(new dbschema.Subject(element))
-  })
-  book.copies = bookDetails.copies
-  book.authors = authors
-  book.subjects = subjects
-  book.title = bookDetails.title
-  book.subtitle = bookDetails.subtitle
-  book.publisher = bookDetails.publisher
-  book.publishedDate = bookDetails.publishedDate
-  book.description = bookDetails.description
-  book.thumbnail = bookDetails.thumbnail
+  if (typeof bookDetails.authors !== "undefined") {
+    let authors = []
+    bookDetails.authors.forEach(function(element) {
+      authors.push(new dbschema.Author(element))
+    })
+    book.authors = authors
+  }
+
+  if (typeof bookDetails.genre !== "undefined") {
+    let subjects = []
+    bookDetails.genre.forEach(function(element) {
+      subjects.push(new dbschema.Subject(element))
+    })
+    book.subjects = subjects
+  }
+
+  book.copies = (typeof bookDetails.copies !== "undefined" && bookDetails.copies > 0 ) ? bookDetails.copies : 0;
+  book.title = (typeof bookDetails.title !== "undefined") ? bookDetails.title : "";
+  book.subtitle = (typeof bookDetails.subtitle !== "undefined") ? bookDetails.subtitle : "";
+  book.publisher = (typeof bookDetails.publisher !== "undefined") ? bookDetails.publisher : "";
+  book.publishedDate = (typeof bookDetails.publishedDate !== "undefined") ? bookDetails.publishedDate : "";
+  book.description = (bookDetails.description !== "undefined") ? bookDetails.description : "";
+  book.thumbnail = (typeof bookDetails.thumbnail !== "undefined") ? bookDetails.thumbnail : "";
 
   console.log("Src : " + JSON.stringify(bookDetails))
   console.log("Just before save : " + JSON.stringify(book))

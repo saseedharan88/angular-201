@@ -1,22 +1,27 @@
-<h1>Books Listing page</h1>
-<ul>
-  <li><a [routerLink]="['/books',101]">Sample Book with ID 101</a></li>
-  <li><a [routerLink]="['/books',101,'edit']">Edit</a></li>
-  <li><a [routerLink]="['/books',0,'edit']">Add</a></li>
-  <li><a [routerLink]="['/books', {name: 'Oru puliyamarathin Kathai', code: 'OPK', author: 'Sundara ramasamy'}]">Optional Parameters example</a></li>
-  <li><a [routerLink]="['/books',001]" [queryParams]="{name: 'Oru puliyamarathin Kathai', code: 'OPK', author: 'Sundara ramasamy'}">Query Parameters example</a></li>
-</ul>
-
-<p>Name: {{ bookName }}</p>
-<p>Author: {{ bookAuthor }}</p>
-<p>Code: {{ bookCode }}</p>
-
-<div *ngFor="let book of bookService.books">
-  <mat-card>
-    ISBN: {{ book.isbn }}
-    Name: {{ book.book_name }}
-  </mat-card>
+<div class="books-component-wrapper">
+  <h1 class="books-component-wrapper__title">{{ filteredText }}</h1>
+  <ul class="book-list-view">
+    <li class="book-list-view__book_item" *ngFor="let book of books">
+      <mat-card>
+        <!--<mat-card>-->
+          <img src="{{ book.thumbnail }}" />
+        <!--</mat-card>-->
+      </mat-card>
+    </li>
+  </ul>
 </div>
+<!--<h1>Books Listing page</h1>-->
+<!--<ul>-->
+  <!--<li><a [routerLink]="['/books',101]">Sample Book with ID 101</a></li>-->
+  <!--<li><a [routerLink]="['/books',101,'edit']">Edit</a></li>-->
+  <!--<li><a [routerLink]="['/books',0,'edit']">Add</a></li>-->
+  <!--<li><a [routerLink]="['/books', {name: 'Oru puliyamarathin Kathai', code: 'OPK', author: 'Sundara ramasamy'}]">Optional Parameters example</a></li>-->
+  <!--<li><a [routerLink]="['/books',001]" [queryParams]="{name: 'Oru puliyamarathin Kathai', code: 'OPK', author: 'Sundara ramasamy'}">Query Parameters example</a></li>-->
+<!--</ul>-->
+
+<!--<p>Name: {{ bookName }}</p>-->
+<!--<p>Author: {{ bookAuthor }}</p>-->
+<!--<p>Code: {{ bookCode }}</p>-->
 
 
 
