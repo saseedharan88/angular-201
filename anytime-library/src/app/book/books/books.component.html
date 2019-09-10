@@ -3,9 +3,7 @@
   <ul class="book-list-view">
     <li class="book-list-view__book_item" *ngFor="let book of books">
       <mat-card>
-        <!--<mat-card>-->
-          <img src="{{ book.thumbnail }}" />
-        <!--</mat-card>-->
+        <img src="{{ bookService.apiUrl + '/' + book.thumbnail }}" />
       </mat-card>
     </li>
   </ul>

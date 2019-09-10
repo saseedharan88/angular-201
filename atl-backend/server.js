@@ -10,11 +10,22 @@ var session = require('express-session')
 var dbschema = require('./models/dbschema')
 var User = require('./models/User.js')
 var auth = require('./auth')
+var fs = require('fs')
+var request = require('request')
 
 var books = [
   {isbn: 'abcdef', book_name: 'Data structures'},
   {isbn: 'abcdef', book_name: 'Advanced C++'}
 ]
+
+var download = function(uri, filename, callback){
+  request.head(uri, function(err, res, body){
+    console.log('content-type:', res.headers['content-type']);
+    console.log('content-length:', res.headers['content-length']);
+
+    request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+  });
+};
 
 // Google Book.
 const GOOGLE_API = 'AIzaSyD41fpvX5zgAuYb2Y4ETOdcQKUVGYIj-Qg';
@@ -26,6 +37,7 @@ app.use(cookieSession({
   maxAge: 24 * 60 * 60 * 1000
 }));
 app.use(cookieParser());
+app.use(express.static('public'))
 
 app.get('/', (req, res) => {
   if (req.session.token) {
@@ -161,9 +173,11 @@ app.post('/update-book-details', async (req, res) => {
   // Check if book details already exists.
   let whereClause = { 'bookId': bookId };
   let bookDoc = await dbschema.Book.findOne(whereClause)
-  if (bookDoc !== null) {
-    // Book already exists.
+  if (bookDoc) {
+    // Book exists.
     book = bookDoc
+  }
+  else {
     book.bookId = bookId;
   }
   // Prepare Book details.
@@ -189,7 +203,17 @@ app.post('/update-book-details', async (req, res) => {
   book.publisher = (typeof bookDetails.publisher !== "undefined") ? bookDetails.publisher : "";
   book.publishedDate = (typeof bookDetails.publishedDate !== "undefined") ? bookDetails.publishedDate : "";
   book.description = (bookDetails.description !== "undefined") ? bookDetails.description : "";
-  book.thumbnail = (typeof bookDetails.thumbnail !== "undefined") ? bookDetails.thumbnail : "";
+
+  // Download the image.
+  if ((typeof bookDetails.thumbnail !== "undefined")) {
+    book.thumbnail = bookId + '.png';
+    download(bookDetails.thumbnail, 'public/' + bookId + '.png', function(){
+      console.log('Image saved !!');
+    });
+  }
+  else {
+    book.thumbnail = 'sample.png';
+  }
 
   console.log("Src : " + JSON.stringify(bookDetails))
   console.log("Just before save : " + JSON.stringify(book))
@@ -224,8 +248,6 @@ app.post('/issue-register', (req, res) => {
     res.status(200).send({message: 'Successfully Issue the Book !!'})
   })
 })
-
-
 
 //Set up mongoose connection
 // var mongoDB = 'mongodb://admin:admin@cluster0-shard-00-00-r9ag9.mongodb.net:27017,cluster0-shard-00-01-r9ag9.mongodb.net:27017,cluster0-shard-00-02-r9ag9.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true';
