@@ -7,11 +7,10 @@ import { BookAddComponent } from './book-add/book-add.component';
 import { BookSearchComponent } from './book-search/book-search.component';
 
 const routes: Routes = [
-    { path: 'books', component: BooksComponent },
+    { path: 'books/:bookid/details', component: BookDetailComponent },
     { path: 'books/:filter_by/:filter_value', component: BooksComponent },
     { path: 'books/search', component: BookSearchComponent },
     { path: 'books/add', component: BookAddComponent },
-    { path: 'books/:id', component: BookDetailComponent },
     { path: 'books/:id/edit', component: BookEditComponent },
 ];
 

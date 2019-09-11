@@ -2,8 +2,11 @@
   <h1 class="books-component-wrapper__title">{{ filteredText }}</h1>
   <ul class="book-list-view">
     <li class="book-list-view__book_item" *ngFor="let book of books">
-      <mat-card>
+      <mat-card class="book-list-view__book_item__card">
         <img src="{{ bookService.apiUrl + '/' + book.thumbnail }}" />
+        <div>
+          <a mat-raised-button color="primary" class="book-list-view__borrow_button" [routerLink]="['/books', book.bookId, 'details' ]">BORROW</a>
+        </div>
       </mat-card>
     </li>
   </ul>

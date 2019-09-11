@@ -1,0 +1,22 @@
+.book-detail-view {
+  height: 100%;
+  &__card {
+    width: 80%;
+    height: 100%;
+    margin: auto;
+  }
+  &__image {
+    float: left;
+    width: 120px;
+    margin-right: 1.5em;
+    margin-bottom: 0;
+    position: relative;
+  }
+  &__content {
+    &__subject {
+      margin-top: 10px;
+    }
+  }
+}
+
+

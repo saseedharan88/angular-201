@@ -1,13 +1,15 @@
 .books-component-wrapper {
+  text-align: center;
   &__title {
     font-family: Roboto;
     font-size: 20px;
     color: #354C8C;
-    margin-left: 50px;
+    padding-left: 10px;
   }
 }
 .book-list-view {
   margin: 0 auto;
+  padding: 0px;
   &__book_item {
     display: inline-block;
     vertical-align: top;
@@ -16,5 +18,11 @@
       width: 120px;
       height: 150px;
     }
+    &__card {
+      padding: 5px;
+    }
+  }
+  &__borrow_button {
+    width: 100%;
   }
 }

@@ -95,7 +95,7 @@ app.get('/book/inventory/details', (req, res) => {
   // Find book with a matching bookId
   let query = dbschema.Book.findOne({ 'bookId': req.query.bookId });
   // selecting the `copies` and `bookId` fields.
-  query.select('copies bookId');
+  // query.select('copies bookId');
   // execute the query at a later time.
   query.exec(function (err, book) {
     if (err)
