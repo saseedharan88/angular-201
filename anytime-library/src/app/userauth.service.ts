@@ -9,6 +9,8 @@ import { AppConstants } from './appConstants';
 export class UserAuthService {
 
   path: string;
+  isError = false;
+  errorMessage: string;
 
   TOKEN_KEY = 'token';
 
@@ -37,7 +39,8 @@ export class UserAuthService {
     this.http.post<any>(this.path + '/login', loginData).subscribe(res => {
       this.saveToken(res.token);
     }, res => {
-      alert(res.error.error);
+      this.isError = true;
+      this.errorMessage = res.error.message;
     });
   }
 

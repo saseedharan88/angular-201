@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit {
   hide = true;
 
   constructor(private userAuthService: UserAuthService, private authService: AuthService, private router: Router) {
+    this.userAuthService.isError = false;
     if (this.userAuthService.isAuthenticated) {
       this.router.navigate(['/books']);
     }
@@ -36,10 +37,6 @@ export class LoginComponent implements OnInit {
 
   signInWithFB(): void {
     this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
-  }
-
-  signOut(): void {
-    this.authService.signOut();
   }
 
   post() {

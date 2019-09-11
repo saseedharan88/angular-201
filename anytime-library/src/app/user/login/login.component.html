@@ -1,4 +1,9 @@
 <mat-card class="login-card">
+
+  <div class="alert" *ngIf="userAuthService.isError" [ngClass]="userAuthService.isError == true ? 'error': ''">
+    <span class="closebtn" (click)="closeAlert()">&times;</span>{{ userAuthService.errorMessage }}
+  </div>
+
   <mat-card-title>Login</mat-card-title>
   <mat-card-content>
     <form class="login-form">

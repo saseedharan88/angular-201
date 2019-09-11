@@ -6,29 +6,38 @@ var router = express.Router()
 
 // User register service.
 router.post('/register', (req, res) => {
-  var userData = req.body;
-  var user = new User(userData);
-  user.save((err, newUser) => {
-    if (err)
-      res.status(401).send({message: 'Error in registering a user: ' + err})
-    createSendToken(res, newUser)
-  })
+  try {
+    var userData = req.body;
+    var user = new User(userData);
+    user.save((err, newUser) => {
+      if (err)
+        res.status(401).send({message: 'Error in registering a user: ' + err})
+      createSendToken(res, newUser)
+    })
+  }
+  catch (error) {
+    res.sendStatus(500)
+  }
 })
 
 // User login service.
 router.post('/login', async (req, res) => {
-  var loginData = req.body;
-  var user = await User.findOne({email: loginData.email});
-  if (!user)
-    res.status(401).send({message: 'Email or Password is invalid'})
-  bcrypt.compare(loginData.password, user.password, (err, isMatch) => {
-    if (err)
-      res.status(401).send({message: 'Error in checking ' + err})
-    if (!isMatch)
-      res.status(401).send({message: 'Password is invalid'})
-    createSendToken(res, user)
-
-  })
+  try {
+    var loginData = req.body;
+    var user = await User.findOne({email: loginData.email});
+    if (!user)
+      return res.status(401).send({message: 'Email or Password is invalid'})
+    bcrypt.compare(loginData.password, user.password, (err, isMatch) => {
+      if (err)
+        return res.status(401).send({message: 'Error in checking ' + err})
+      if (!isMatch)
+        return res.status(401).send({message: 'Password is invalid'})
+      createSendToken(res, user)
+    })
+  }
+  catch(error) {
+    return res.sendStatus(500)
+  }
 })
 
 function createSendToken(res, user) {

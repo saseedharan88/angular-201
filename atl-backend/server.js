@@ -48,54 +48,57 @@ app.get('/', (req, res) => {
   }
 })
 
-app.get('/logout', (req, res) => {
-  req.logout();
-  req.session = null;
-  res.redirect('/');
-});
-
 app.get('/search-books', (req, res) => {
-  var searchQuery = "";
-  if (req.query.isbn != "") {
-    searchQuery += "+isbn:" + req.query.isbn;
+  try {
+    var searchQuery = "";
+    if (req.query.isbn != "") {
+      searchQuery += "+isbn:" + req.query.isbn;
+    }
+    if (req.query.title != "") {
+      searchQuery += "+intitle:" + req.query.title;
+    }
+    if (req.query.author != "") {
+      searchQuery += "+inauthor:" + req.query.author;
+    }
+
+    https.get('https://www.googleapis.com/books/v1/volumes?q=' + searchQuery + '&maxResults=40&key=' + GOOGLE_API, (resp) => {
+      let data = '';
+
+      // A chunk of data has been received.
+      resp.on('data', (chunk) => {
+        data += chunk;
+      });
+
+      // The whole response has been received. Print out the result.
+      resp.on('end', () => {
+        res.send(data)
+      });
+
+    }).on("error", (err) => {
+      res.send(err.message)
+    });  }
+  catch (error) {
+    res.sendStatus(500)
   }
-  if (req.query.title != "") {
-    searchQuery += "+intitle:" + req.query.title;
-  }
-  if (req.query.author != "") {
-    searchQuery += "+inauthor:" + req.query.author;
-  }
-
-  https.get('https://www.googleapis.com/books/v1/volumes?q=' + searchQuery + '&maxResults=40&key=' + GOOGLE_API, (resp) => {
-    let data = '';
-
-    // A chunk of data has been received.
-    resp.on('data', (chunk) => {
-      data += chunk;
-    });
-
-    // The whole response has been received. Print out the result.
-    resp.on('end', () => {
-      res.send(data)
-    });
-
-  }).on("error", (err) => {
-    res.send(err.message)
-  });
 })
 
 // Get book inventory details.
 app.get('/book/inventory/details', (req, res) => {
-  // Find book with a matching bookId
-  let query = dbschema.Book.findOne({ 'bookId': req.query.bookId });
-  // selecting the `copies` and `bookId` fields.
-  // query.select('copies bookId');
-  // execute the query at a later time.
-  query.exec(function (err, book) {
-    if (err)
-      res.send(err.message)
-    res.send(book)
-  });
+  try {
+    // Find book with a matching bookId
+    let query = dbschema.Book.findOne({ 'bookId': req.query.bookId });
+    // selecting the `copies` and `bookId` fields.
+    // query.select('copies bookId');
+    // execute the query at a later time.
+    query.exec(function (err, book) {
+      if (err)
+        res.send(err.message)
+      res.send(book)
+    });
+  }
+  catch (error) {
+    res.sendStatus(500)
+  }
 })
 
 // Get all unique subjects from database.
@@ -115,28 +118,38 @@ app.get('/library/subjects', async (req, res) => {
 
 // Get all unique authors from database.
 app.get('/library/authors', (req, res) => {
-  let query = dbschema.Book.distinct("authors.name");
-  query.exec(function (err, authors) {
-    if (err)
-      res.send(err.message)
-    res.send(authors)
-  });
+  try {
+    let query = dbschema.Book.distinct("authors.name");
+    query.exec(function (err, authors) {
+      if (err)
+        res.send(err.message)
+      res.send(authors)
+    });
+  }
+  catch (error) {
+    res.sendStatus(500)
+  }
 })
 
 // Get all books from application database.
 app.get('/library/books', (req, res) => {
-  let query = dbschema.Book.find();
-  let filterBy = req.query.filterBy;
-  let filterValue = req.query.filterValue;
-  if (filterBy !== ""  && filterValue !== "") {
-    query = dbschema.Book.find()
-      .where(filterBy + ".name").equals(filterValue);
+  try {
+    let query = dbschema.Book.find();
+    let filterBy = req.query.filterBy;
+    let filterValue = req.query.filterValue;
+    if (filterBy !== ""  && filterValue !== "") {
+      query = dbschema.Book.find()
+        .where(filterBy + ".name").equals(filterValue);
+    }
+    query.exec(function (err, book) {
+      if (err)
+        res.send(err.message)
+      res.send(book)
+    });
   }
-  query.exec(function (err, book) {
-    if (err)
-      res.send(err.message)
-    res.send(book)
-  });
+  catch (error) {
+    res.sendStatus(500)
+  }
 })
 
 // Add Book service.
@@ -162,59 +175,64 @@ app.post('/addbook', (req, res) => {
 
 // Update Book details service.
 app.post('/update-book-details', auth.checkAuthenticated, async (req, res) => {
-  let bookDetails = req.body;
-  let bookId = bookDetails.bookId;
-  let book = new dbschema.Book()
-  // Check if book details already exists.
-  let whereClause = { 'bookId': bookId };
-  let bookDoc = await dbschema.Book.findOne(whereClause)
-  if (bookDoc) {
-    // Book exists.
-    book = bookDoc
-  }
-  else {
-    book.bookId = bookId;
-  }
-  // Prepare Book details.
-  if (typeof bookDetails.authors !== "undefined") {
-    let authors = []
-    bookDetails.authors.forEach(function(element) {
-      authors.push(new dbschema.Author(element))
-    })
-    book.authors = authors
-  }
-
-  if (typeof bookDetails.genre !== "undefined") {
-    let subjects = []
-    bookDetails.genre.forEach(function(element) {
-      subjects.push(new dbschema.Subject(element))
-    })
-    book.subjects = subjects
-  }
-
-  book.copies = (typeof bookDetails.copies !== "undefined" && bookDetails.copies > 0 ) ? bookDetails.copies : 0;
-  book.title = (typeof bookDetails.title !== "undefined") ? bookDetails.title : "";
-  book.subtitle = (typeof bookDetails.subtitle !== "undefined") ? bookDetails.subtitle : "";
-  book.publisher = (typeof bookDetails.publisher !== "undefined") ? bookDetails.publisher : "";
-  book.publishedDate = (typeof bookDetails.publishedDate !== "undefined") ? bookDetails.publishedDate : "";
-  book.description = (bookDetails.description !== "undefined") ? bookDetails.description : "";
-
-  // Download the image.
-  if ((typeof bookDetails.thumbnail !== "undefined")) {
-    book.thumbnail = bookId + '.png';
-    download(bookDetails.thumbnail, 'public/' + bookId + '.png', function(){
-    });
-  }
-  else {
-    book.thumbnail = 'sample.png';
-  }
-
-  book.save((err, result) => {
-    if (err) {
-      res.send({ success: false, message: "Some error occurred " + err.message })
+  try {
+    let bookDetails = req.body;
+    let bookId = bookDetails.bookId;
+    let book = new dbschema.Book()
+    // Check if book details already exists.
+    let whereClause = { 'bookId': bookId };
+    let bookDoc = await dbschema.Book.findOne(whereClause)
+    if (bookDoc) {
+      // Book exists.
+      book = bookDoc
     }
-    res.send({ success: true, message: "Successfully Saved !!", data: result })
-  })
+    else {
+      book.bookId = bookId;
+    }
+    // Prepare Book details.
+    if (typeof bookDetails.authors !== "undefined") {
+      let authors = []
+      bookDetails.authors.forEach(function(element) {
+        authors.push(new dbschema.Author(element))
+      })
+      book.authors = authors
+    }
+
+    if (typeof bookDetails.genre !== "undefined") {
+      let subjects = []
+      bookDetails.genre.forEach(function(element) {
+        subjects.push(new dbschema.Subject(element))
+      })
+      book.subjects = subjects
+    }
+
+    book.copies = (typeof bookDetails.copies !== "undefined" && bookDetails.copies > 0 ) ? bookDetails.copies : 0;
+    book.title = (typeof bookDetails.title !== "undefined") ? bookDetails.title : "";
+    book.subtitle = (typeof bookDetails.subtitle !== "undefined") ? bookDetails.subtitle : "";
+    book.publisher = (typeof bookDetails.publisher !== "undefined") ? bookDetails.publisher : "";
+    book.publishedDate = (typeof bookDetails.publishedDate !== "undefined") ? bookDetails.publishedDate : "";
+    book.description = (bookDetails.description !== "undefined") ? bookDetails.description : "";
+
+    // Download the image.
+    if ((typeof bookDetails.thumbnail !== "undefined")) {
+      book.thumbnail = bookId + '.png';
+      download(bookDetails.thumbnail, 'public/' + bookId + '.png', function(){
+      });
+    }
+    else {
+      book.thumbnail = 'sample.png';
+    }
+
+    book.save((err, result) => {
+      if (err) {
+        res.send({ success: false, message: "Some error occurred " + err.message })
+      }
+      res.send({ success: true, message: "Successfully Saved !!", data: result })
+    })
+  }
+  catch (error) {
+    res.sendStatus(500)
+  }
 })
 
 // Get list of users.
@@ -229,13 +247,18 @@ app.get('/users', async (req, res) => {
 
 // Book issue register.
 app.post('/issue-register', (req, res) => {
-  var issueRegisterData = req.body;
-  var issueRegister = new dbschema.IssueRegister(issueRegisterData);
-  issueRegister.save((err, result) => {
-    if (err)
-      res.status(401).send({message: 'Could not able to issue, some error occurred : ' + err})
-    res.status(200).send({message: 'Successfully Issue the Book !!'})
-  })
+  try {
+    var issueRegisterData = req.body;
+    var issueRegister = new dbschema.IssueRegister(issueRegisterData);
+    issueRegister.save((err, result) => {
+      if (err)
+        res.status(401).send({message: 'Could not able to issue, some error occurred : ' + err})
+      res.status(200).send({message: 'Successfully Issue the Book !!'})
+    })
+  }
+  catch (error) {
+    res.sendStatus(500)
+  }
 })
 
 // Set up mongoose connection.
