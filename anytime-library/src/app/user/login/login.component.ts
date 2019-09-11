@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../service/user.service';
-
+import { UserAuthService } from '../../userauth.service';
 import { AuthService } from 'angularx-social-login';
 import { SocialUser } from 'angularx-social-login';
 import { GoogleLoginProvider, FacebookLoginProvider, LinkedInLoginProvider } from 'angularx-social-login';
@@ -16,10 +15,11 @@ export class LoginComponent implements OnInit {
   user: SocialUser;
   loggedIn: boolean;
   loginData = {}
+  hide = true;
 
-  constructor(private userService: UserService, private authService: AuthService, private router: Router) {
-    if (this.userService.isLoggedIn) {
-      this.router.navigate(['/welcome']);
+  constructor(private userAuthService: UserAuthService, private authService: AuthService, private router: Router) {
+    if (this.userAuthService.isAuthenticated) {
+      this.router.navigate(['/books']);
     }
   }
 
@@ -43,8 +43,7 @@ export class LoginComponent implements OnInit {
   }
 
   post() {
-    console.log(this.loginData);
-    this.userService.loginUser(this.loginData);
+    this.userAuthService.loginUser(this.loginData);
   }
 
 }

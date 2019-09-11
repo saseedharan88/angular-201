@@ -7,6 +7,13 @@
   <span flex></span>
     <!--<mat-icon style="font-size: 25px">person</mat-icon>-->
     <img *ngIf="user" mat-card-avatar src="{{ user.photoUrl }}">
+    <div class="user-auth-links" >
+      <a mat-button *ngIf="!userAuthService.isAuthenticated" class="" [routerLink]="['/login']">Login</a>
+      <a mat-button *ngIf="!userAuthService.isAuthenticated" class="" [routerLink]="['/register']">Register</a>
+      <a mat-button *ngIf="userAuthService.isAuthenticated" class="" (click)="userAuthService.logout()">Logout</a>
+    </div>
+
+
     <!--{{ user.name }}-->
 
   <!--<img src="{{ user.photoUrl }}">-->

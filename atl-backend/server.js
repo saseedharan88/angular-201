@@ -12,17 +12,12 @@ var User = require('./models/User.js')
 var auth = require('./auth')
 var fs = require('fs')
 var request = require('request')
-
-var books = [
-  {isbn: 'abcdef', book_name: 'Data structures'},
-  {isbn: 'abcdef', book_name: 'Advanced C++'}
-]
+var jwt = require('jwt-simple')
 
 var download = function(uri, filename, callback){
   request.head(uri, function(err, res, body){
     console.log('content-type:', res.headers['content-type']);
     console.log('content-length:', res.headers['content-length']);
-
     request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
   });
 };
@@ -91,7 +86,6 @@ app.get('/search-books', (req, res) => {
 
 // Get book inventory details.
 app.get('/book/inventory/details', (req, res) => {
-  console.log("req.bookId : "+req.query.bookId)
   // Find book with a matching bookId
   let query = dbschema.Book.findOne({ 'bookId': req.query.bookId });
   // selecting the `copies` and `bookId` fields.
@@ -105,13 +99,18 @@ app.get('/book/inventory/details', (req, res) => {
 })
 
 // Get all unique subjects from database.
-app.get('/library/subjects', (req, res) => {
-  let query = dbschema.Book.distinct("subjects.name");
-  query.exec(function (err, subjects) {
-    if (err)
-      res.send(err.message)
-    res.send(subjects)
-  });
+app.get('/library/subjects', async (req, res) => {
+  try {
+    let query = dbschema.Book.distinct("subjects.name");
+    query.exec(function (err, subjects) {
+      if (err)
+        res.send(err.message)
+      res.send(subjects)
+    });
+  }
+  catch (error) {
+    res.sendStatus(500)
+  }
 })
 
 // Get all unique authors from database.
@@ -129,10 +128,7 @@ app.get('/library/books', (req, res) => {
   let query = dbschema.Book.find();
   let filterBy = req.query.filterBy;
   let filterValue = req.query.filterValue;
-  console.log("Outside if: " + filterBy);
-  console.log("Outside if 2: " + filterValue);
   if (filterBy !== ""  && filterValue !== "") {
-    console.log("Inside if");
     query = dbschema.Book.find()
       .where(filterBy + ".name").equals(filterValue);
   }
@@ -165,11 +161,10 @@ app.post('/addbook', (req, res) => {
 })
 
 // Update Book details service.
-app.post('/update-book-details', async (req, res) => {
+app.post('/update-book-details', auth.checkAuthenticated, async (req, res) => {
   let bookDetails = req.body;
   let bookId = bookDetails.bookId;
   let book = new dbschema.Book()
-
   // Check if book details already exists.
   let whereClause = { 'bookId': bookId };
   let bookDoc = await dbschema.Book.findOne(whereClause)
@@ -208,15 +203,12 @@ app.post('/update-book-details', async (req, res) => {
   if ((typeof bookDetails.thumbnail !== "undefined")) {
     book.thumbnail = bookId + '.png';
     download(bookDetails.thumbnail, 'public/' + bookId + '.png', function(){
-      console.log('Image saved !!');
     });
   }
   else {
     book.thumbnail = 'sample.png';
   }
 
-  console.log("Src : " + JSON.stringify(bookDetails))
-  console.log("Just before save : " + JSON.stringify(book))
   book.save((err, result) => {
     if (err) {
       res.send({ success: false, message: "Some error occurred " + err.message })
@@ -225,18 +217,15 @@ app.post('/update-book-details', async (req, res) => {
   })
 })
 
-
 // Get list of users.
 app.get('/users', async (req, res) => {
   try {
     var users = await User.find({}, '-password -__v')
     res.send(users)
   } catch (error) {
-    console.log("Error in getting users")
     res.sendStatus(500)
   }
 })
-
 
 // Book issue register.
 app.post('/issue-register', (req, res) => {
@@ -249,11 +238,8 @@ app.post('/issue-register', (req, res) => {
   })
 })
 
-//Set up mongoose connection
-// var mongoDB = 'mongodb://admin:admin@cluster0-shard-00-00-r9ag9.mongodb.net:27017,cluster0-shard-00-01-r9ag9.mongodb.net:27017,cluster0-shard-00-02-r9ag9.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true';
+// Set up mongoose connection.
 var mongoDB = 'mongodb://127.0.0.1:27017/atldb';
-// var mongoDB = 'mongodb://admin:hT7XfP6l6RGZkqEl@main-shard-00-00-03xkr.mongodb.net:27017,main-shard-00-01-03xkr.mongodb.net:27017,main-shard-00-02-03xkr.mongodb.net:27017/main?ssl=true&replicaSet=Main-shard-0&authSource=admin&retryWrites=true';
-// var mongoDB =  'mongodb+srv://admin:admin@cluster0-ix1h1.mongodb.net/test?retryWrites=true&w=majority';
 mongoose.connect(mongoDB, {useNewUrlParser: true}, (err) => {
   console.log('attempt connected to mongo !!');
   if (!err) {
@@ -263,9 +249,5 @@ mongoose.connect(mongoDB, {useNewUrlParser: true}, (err) => {
     console.log("Connection error:" + err);
   }
 });
-// mongoose.Promise = global.Promise;
-// var db = mongoose.connection;
-// db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
-app.use('/auth', auth)
+app.use('/auth', auth.router)
 app.listen(3000)

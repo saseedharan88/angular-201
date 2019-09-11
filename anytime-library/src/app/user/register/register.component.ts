@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../service/user.service';
+import { UserAuthService } from '../../userauth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,9 +10,9 @@ import { Router } from '@angular/router';
 export class RegisterComponent implements OnInit {
   registerData = {}
 
-  constructor(private userService: UserService, private router: Router) {
-    if (this.userService.isLoggedIn) {
-      this.router.navigate(['/welcome']);
+  constructor(private userAuthService: UserAuthService, private router: Router) {
+    if (this.userAuthService.isAuthenticated) {
+      this.router.navigate(['/books']);
     }
   }
 
@@ -20,7 +20,6 @@ export class RegisterComponent implements OnInit {
   }
 
   post() {
-    console.log(this.registerData);
-    this.userService.registerUser(this.registerData);
+    this.userAuthService.registerUser(this.registerData);
   }
 }

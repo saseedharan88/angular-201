@@ -8,10 +8,10 @@ var router = express.Router()
 router.post('/register', (req, res) => {
   var userData = req.body;
   var user = new User(userData);
-  user.save((err, result) => {
+  user.save((err, newUser) => {
     if (err)
       res.status(401).send({message: 'Error in registering a user: ' + err})
-    res.status(200).send({message: 'Successfully Registered !!'})
+    createSendToken(res, newUser)
   })
 })
 
@@ -19,7 +19,6 @@ router.post('/register', (req, res) => {
 router.post('/login', async (req, res) => {
   var loginData = req.body;
   var user = await User.findOne({email: loginData.email});
-  console.log("from db user: " + user.email + " = " + user.password);
   if (!user)
     res.status(401).send({message: 'Email or Password is invalid'})
   bcrypt.compare(loginData.password, user.password, (err, isMatch) => {
@@ -27,10 +26,29 @@ router.post('/login', async (req, res) => {
       res.status(401).send({message: 'Error in checking ' + err})
     if (!isMatch)
       res.status(401).send({message: 'Password is invalid'})
-    var payload = {}
-    var token = jwt.encode(payload, '123')
-    res.status(200).send({token})
+    createSendToken(res, user)
+
   })
 })
 
-module.exports = router
+function createSendToken(res, user) {
+  var payload = { sub: user._id }
+  var token = jwt.encode(payload, '123')
+  res.status(200).send({token})
+}
+
+var auth = {
+  router,
+  checkAuthenticated: (req, res, next) => {
+    if (!req.header('authorization'))
+      return res.status(401).send({message: 'Unauthorized. Missing Auth Header'})
+    var token = req.header('authorization').split(' ')[1]
+    var payload = jwt.decode(token, '123')
+    if (!payload)
+      return res.status(401).send({ message: 'Unauthorized. Auth Header Invalid'})
+    req.userId = payload.sub
+    next()
+  }
+}
+
+module.exports = auth

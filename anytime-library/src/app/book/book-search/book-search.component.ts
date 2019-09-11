@@ -49,8 +49,6 @@ export class BookSearchComponent implements OnInit {
 
   openDialog(bookId, volumeInfo): void {
     // Fetch book details from database.
-    console.log("Subjects: "+JSON.stringify(volumeInfo.categories));
-    console.log("Authors: "+JSON.stringify(volumeInfo.authors));
     this.bookService.getBookDetails(bookId).subscribe((data: {}) => {
       let copies = 0;
       if (data !== null && Object.keys(data).length !== 0) {
@@ -75,7 +73,6 @@ export class BookSearchComponent implements OnInit {
       });
 
       dialogRef.afterClosed().subscribe(result => {
-        console.log('The dialog was closed');
       });
 
     });
@@ -122,10 +119,8 @@ export class BookAddDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-
   updateBookCopies() {
     return this.bookService.updateBookDetails(this.addToLibraryForm.value).subscribe((data: any) => {
-      console.log("data: " + JSON.stringify(data));
       this.data = data.data;
       this.message = data.message;
       this.success = data.success;
