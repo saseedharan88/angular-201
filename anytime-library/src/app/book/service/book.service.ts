@@ -4,7 +4,7 @@ import {Author, Book, Genre } from '../book';
 import {Observable, throwError} from 'rxjs';
 import {retry, catchError} from 'rxjs/operators';
 import {AppConstants} from '../../appConstants';
-// import {forEach} from "@angular/router/src/utils/collection";
+import {ActivatedRoute, Router} from '@angular/router';
 
 const headers = new HttpHeaders({
   'Content-type': 'application/json',
@@ -17,8 +17,11 @@ export class BookService {
   books: Array<Book> = [];
   filterList: Array<string> = [];
   apiUrl: string;
+  statusMessage: string;
+  statusMessageText: string;
+  returnUrl: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) {
     this.apiUrl = AppConstants.apiUrl;
   }
 
@@ -72,8 +75,6 @@ export class BookService {
 
   // Update book details to mongodb.
   updateBookDetails(args): Observable<any> {
-
-    console.log("args:: "+JSON.stringify(args));
     const bookDetail = new Book();
     bookDetail.bookId = args.bookId;
     bookDetail.copies = args.copies;
@@ -101,7 +102,6 @@ export class BookService {
     bookDetail.publishedDate = args.publishedDate;
     bookDetail.description = args.description;
     bookDetail.thumbnail = args.thumbnail;
-    console.log("args bk:: "+JSON.stringify(bookDetail));
     return this.http.post<any>(this.apiUrl + '/update-book-details', bookDetail, {headers: headers})
       .pipe(
         catchError(this.handleError)
@@ -132,9 +132,13 @@ export class BookService {
     issueData.rating = '';
     issueData.issueStatus = 'issued';
     this.http.post<any>(this.apiUrl + '/issue-register', issueData).subscribe(res => {
-      console.log('Res: ' + JSON.stringify(res));
+      this.statusMessage = 'success';
+      this.statusMessageText = res.message;
     }, res => {
-      alert(res.error.error);
+      this.statusMessage = 'error';
+      this.statusMessageText = res.error;
     });
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.router.navigateByUrl('/books/' + borrowData.bookId + '/details');
   }
 }

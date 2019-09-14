@@ -5,6 +5,11 @@
     </mat-card-title>
   </mat-card-header>
   <mat-card-content class="book-borrow__content">
+
+    <div class="alert" *ngIf="bookService.statusMessage" [ngClass]="bookService.statusMessage">
+      <span class="closebtn" (click)="closeAlert()">&times;</span>{{ bookService.statusMessageText }}
+    </div>
+
     <form class="book-borrow__form" [formGroup]="borrowBookForm" (ngSubmit)="save()">
       <input type="hidden" formControlName="bookId">
       <mat-form-field class="book-borrow__form__element">
@@ -14,7 +19,10 @@
         <input type="text" required formControlName="bookAuthor" matInput placeholder="Book Authors">
       </mat-form-field>
       <mat-form-field class="book-borrow__form__element">
-        <input type="text" required formControlName="copiesBorrow" matInput placeholder="Copies">
+        <mat-label>Copies</mat-label>
+        <select matNativeControl required formControlName="copiesBorrow">
+          <option *ngFor="let number of this.availableCopies" value="{{ number }}">{{ number }}</option>
+        </select>
       </mat-form-field>
 
       <div formGroupName="emailGroup">
@@ -85,7 +93,7 @@
       <button mat-raised-button color="primary"
               type="submit"
               [title]="borrowBookForm.valid ? 'Save your entered data' : 'Disabled until the form data is valid'">
-        Save
+        Borrow
       </button>
     </form>
   </mat-card-content>

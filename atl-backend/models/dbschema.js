@@ -28,6 +28,7 @@ let bookSchema = new Schema(
     authors: [ authorSchema ],
     createdOn: { type: Date, default: Date.now() },
     copies: Number,
+    copiesIssued: Number,
     bookId: String,
     publisher: String,
     publishedDate: String,
@@ -40,11 +41,12 @@ let Book = mongoose.model('Book',bookSchema);
 // Issue Register schema.
 var issueRegisterSchema = new Schema(
   {
+    userId: String,
     bookId: String,
     issueDate: String,
     returnDate: String,
     reviewComment: String,
-    copies: String,
+    copies: Number,
     email: String,
     phone: String,
     notificationMode: String,

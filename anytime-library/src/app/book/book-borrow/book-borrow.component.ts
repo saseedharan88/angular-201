@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl, ValidatorFn, FormArray } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { BookService } from '../service/book.service';
+import { ActivatedRoute } from '@angular/router';
 
 function emailMatcher(c: AbstractControl): { [key: string]: boolean } | null {
   const emailControl = c.get('email');
@@ -25,6 +26,9 @@ function emailMatcher(c: AbstractControl): { [key: string]: boolean } | null {
 export class BookBorrowComponent implements OnInit {
   borrowBookForm: FormGroup;
   emailMessage: string;
+  bookId: string;
+  book: any;
+  availableCopies = [];
 
   private validationMessages = {
     required: 'Please enter your email address.',
@@ -32,13 +36,14 @@ export class BookBorrowComponent implements OnInit {
   };
 
 
-  constructor(private fb: FormBuilder, private bookService: BookService) { }
+  constructor(private route: ActivatedRoute, private fb: FormBuilder, private bookService: BookService) { }
 
   ngOnInit() {
     this.borrowBookForm = this.fb.group({
-      bookId: {value: 'test', disabled: true},
-      bookName: {value: 'test', disabled: true},
-      bookAuthor: {value: 'test', disabled: true},
+      userId: {value: ''},
+      bookId: {value: ''},
+      bookName: {value: '', disabled: true},
+      bookAuthor: {value: '', disabled: true},
       emailGroup: this.fb.group({
         email: ['', [Validators.required, Validators.email]],
         confirmEmail: ['', Validators.required],
@@ -61,11 +66,23 @@ export class BookBorrowComponent implements OnInit {
     ).subscribe(
       value => this.setMessage(emailControl)
     );
+
+    this.route.paramMap.subscribe(
+      params => {
+        this.bookId = params.get('bookid');
+        // Get book details by ID.
+        this.bookService.getBookDetails(this.bookId).subscribe((data: {}) => {
+          if (data !== null && Object.keys(data).length !== 0) {
+            // Book details available.
+            this.book = data;
+            this.populateBookData(this.book);
+          }
+        });
+      }
+    );
   }
 
   save() {
-    console.log(this.borrowBookForm);
-    console.log('Saved: ' + JSON.stringify(this.borrowBookForm.value));
     this.bookService.borrowBook(this.borrowBookForm.value);
   }
 
@@ -86,4 +103,28 @@ export class BookBorrowComponent implements OnInit {
     }
     phoneControl.updateValueAndValidity();
   }
+
+  populateBookData(book): void {
+    // Get Book details by ID.
+    let author = '';
+    book.authors.forEach((value, index) => {
+      author += value.name;
+      if ((index + 1) < book.authors.length) {
+        author += ', ';
+      }
+    });
+
+    this.borrowBookForm.patchValue({
+      bookId: book.bookId,
+      bookName: book.title,
+      bookAuthor: author
+    });
+
+    this.availableCopies = book.copies;
+    if (typeof book.copiesIssued !== 'undefined') {
+      this.availableCopies = book.copies - book.copiesIssued;
+    }
+    this.availableCopies = Array(this.availableCopies).fill().map((x, i) => i + 1);
+  }
+
 }

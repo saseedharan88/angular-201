@@ -13,6 +13,7 @@ export class BookDetailComponent implements OnInit {
   bookId: string;
   book: any;
   dataLoaded = false;
+  availableCopies = 0;
   constructor(private route: ActivatedRoute, private bookService: BookService, private userAuthService: UserAuthService) {
   }
 
@@ -26,14 +27,15 @@ export class BookDetailComponent implements OnInit {
             // Book details available.
             this.dataLoaded = true;
             this.book = data;
-            console.log("c:" + JSON.stringify(this.book));
+
+            // Copies count.
+            this.availableCopies = this.book.copies;
+            if (typeof this.book.copiesIssued !== 'undefined') {
+              this.availableCopies = this.book.copies - this.book.copiesIssued;
+            }
           }
         });
       }
     );
-  }
-
-  borrowBook() {
-    alert("Borrow Book !!");
   }
 }

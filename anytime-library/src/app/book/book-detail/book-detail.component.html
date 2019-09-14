@@ -1,5 +1,10 @@
 <a [routerLink]="['/books']">Home</a>
 <div class="book-detail-view">
+
+  <div class="alert" *ngIf="bookService.statusMessage" [ngClass]="bookService.statusMessage">
+    <span class="closebtn" (click)="closeAlert()">&times;</span>{{ bookService.statusMessageText }}
+  </div>
+
   <mat-card *ngIf="dataLoaded" class="book-detail-view__card">
     <img class="book-detail-view__image" src="{{ this.bookService.apiUrl + '/' + this.book.thumbnail }}" />
     <mat-card-title class="book-detail-view__title">{{ this.book.title }}</mat-card-title>
@@ -20,13 +25,13 @@
         </span>
       </div>
       <p>Published <b>{{ this.book.publishedDate }}</b> by <b>{{ this.book.publisher }}</b></p>
-      <p class="">
-        Copies available: <b>{{ this.book.copies }}</b>&nbsp;&nbsp;&nbsp;&nbsp;
+      <p class="" *ngIf="this.availableCopies > 0; else copies_not_available">
+        Copies available: <b>{{ this.availableCopies }}</b>&nbsp;&nbsp;&nbsp;&nbsp;
         <a mat-raised-button color="primary" class="book-list-view__borrow_button" [routerLink]="['/books',this.book.bookId,'borrow']">
           {{ (userAuthService.isAuthenticated) ? 'BORROW' : 'LOGIN TO BORROW' }}
         </a>
-        <!--<a *ngIf="!userAuthService.isAuthenticated" mat-raised-button color="primary" class="book-list-view__borrow_button" [routerLink]="['/books',this.book.bookId,'borrow']"></a>-->
       </p>
+      <ng-template #copies_not_available><p style="color: red;">Not available</p></ng-template>
       <p class="">Description: {{ this.book.description }}</p>
     </mat-card-content>
   </mat-card>

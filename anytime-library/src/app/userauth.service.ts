@@ -53,7 +53,6 @@ export class UserAuthService {
   saveToken(token) {
     localStorage.setItem(this.TOKEN_KEY, token);
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    alert("returnUrl: "+this.returnUrl);
     this.router.navigateByUrl(this.returnUrl);
   }
 }

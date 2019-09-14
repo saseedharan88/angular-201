@@ -176,6 +176,9 @@ app.post('/addbook', (req, res) => {
 // Update Book details service.
 app.post('/update-book-details', auth.checkAuthenticated, async (req, res) => {
   try {
+
+    console.log("Req user from cc: " + req.userId)
+
     let bookDetails = req.body;
     let bookId = bookDetails.bookId;
     let book = new dbschema.Book()
@@ -246,7 +249,7 @@ app.get('/users', async (req, res) => {
 })
 
 // Book issue register.
-app.post('/issue-register', (req, res) => {
+app.post('/issue-register', auth.checkAuthenticated, (req, res) => {
   try {
     let issueRegisterData = req.body
     console.log("issueRegisterData : " + JSON.stringify(issueRegisterData))
@@ -261,11 +264,13 @@ app.post('/issue-register', (req, res) => {
       issueRegisterData.returnDate = Date.now()
       issuedStatus = "Returned"
     }
-
-    var issueRegister = new dbschema.IssueRegister(issueRegisterData)
+    issueRegisterData.borrower = req.userId;
+    let issueRegister = new dbschema.IssueRegister(issueRegisterData)
     issueRegister.save((err, result) => {
       if (err)
         res.status(401).send({message: 'Could not able to update, some error occurred : ' + err})
+      // Update the master book schema copiesissued value.
+      let bookDoc = updateBookCopiesIssued(issueRegisterData.bookId,issueRegisterData.copies,issueRegisterData.issueStatus)
       res.status(200).send({message: 'Successfully ' + issuedStatus + ' the Book !!'})
     })
   }
@@ -273,6 +278,24 @@ app.post('/issue-register', (req, res) => {
     res.sendStatus(500)
   }
 })
+
+var updateBookCopiesIssued = async function (bookId, copies, issueStatus) {
+  try {
+    const filter = { bookId: bookId };
+    let doc = await dbschema.Book.findOne(filter)
+    if (issueStatus == "issued") {
+      doc.copiesIssued = (typeof doc.copiesIssued !== "undefined") ? (parseFloat(doc.copiesIssued) + parseFloat(copies)) : parseFloat(copies)
+    }
+    else if (issueStatus == "returned") {
+      doc.copiesIssued =  parseFloat(doc.copiesIssued) - parseFloat(copies)
+    }
+    await doc.save();
+  }
+  catch (error) {
+    return error
+  }
+}
+
 
 // Set up mongoose connection.
 var mongoDB = 'mongodb://127.0.0.1:27017/atldb';
