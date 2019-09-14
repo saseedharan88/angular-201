@@ -1,5 +1,10 @@
 <mat-card>
   <mat-card-header>
+
+    <div class="alert" *ngIf="userAuthService.statusMessage" [ngClass]="userAuthService.statusMessage">
+      <span class="closebtn" (click)="closeAlert()">&times;</span>{{ userAuthService.statusMessageText }}
+    </div>
+
     <mat-card-title>
       <h4>Register New User</h4>
     </mat-card-title>

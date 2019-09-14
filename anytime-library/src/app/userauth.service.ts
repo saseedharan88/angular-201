@@ -8,14 +8,18 @@ import { AppConstants } from './appConstants';
 })
 export class UserAuthService {
 
+  apiUrl: string;
   path: string;
   isError = false;
-  errorMessage: string;
+  statusMessage: string;
+  statusMessageText: string;
   returnUrl: string;
 
   TOKEN_KEY = 'token';
+  USER_ROLE = 'role';
 
   constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) {
+    this.apiUrl = AppConstants.apiUrl;
     this.path = AppConstants.apiUrl + '/auth';
   }
 
@@ -28,25 +32,39 @@ export class UserAuthService {
     return !!localStorage.getItem(this.TOKEN_KEY);
   }
 
+  get userRole(): string {
+    return localStorage.getItem(this.USER_ROLE);
+  }
+
+  currentUser(): any {
+    return this.http.get(this.apiUrl + '/current_user').subscribe((res: any) => {
+      localStorage.setItem(this.USER_ROLE, res.role);
+    });
+  }
+
   registerUser(registerData) {
     this.http.post<any>(this.path + '/register', registerData).subscribe(res => {
       this.saveToken(res.token);
+      this.currentUser();
     }, res => {
-      alert(res.error.error);
+      this.statusMessage = 'error';
+      this.statusMessageText = res.error.message;
     });
   }
 
   loginUser(loginData) {
     this.http.post<any>(this.path + '/login', loginData).subscribe(res => {
       this.saveToken(res.token);
+      this.currentUser();
     }, res => {
-      this.isError = true;
-      this.errorMessage = res.error.message;
+      this.statusMessage = 'error';
+      this.statusMessageText = res.error.message;
     });
   }
 
   logout() {
     localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem(this.USER_ROLE);
     this.router.navigateByUrl('/');
   }
 

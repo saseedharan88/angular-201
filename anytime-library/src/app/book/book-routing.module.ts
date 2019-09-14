@@ -12,7 +12,7 @@ const routes: Routes = [
     { path: 'books/:bookid/borrow', canActivate: [AuthGuard], component: BookBorrowComponent },
     { path: 'books/:bookid/details', component: BookDetailComponent },
     { path: 'books/:filter_by/:filter_value', component: BooksComponent },
-    { path: 'books/search', component: BookSearchComponent },
+    { path: 'books/search', canActivate: [AuthGuard], data: { roles: ['admin'] }, component: BookSearchComponent },
     { path: 'books/add', component: BookAddComponent },
     { path: 'books/:id/edit', component: BookEditComponent },
     { path: 'books', component: BooksComponent },

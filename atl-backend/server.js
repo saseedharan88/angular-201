@@ -238,6 +238,20 @@ app.post('/update-book-details', auth.checkAuthenticated, async (req, res) => {
   }
 })
 
+// Get current Logged in user data.
+app.get('/current_user', auth.checkAuthenticated, async (req, res) => {
+  try {
+    var user_id = req.userId
+    var user = await User.findOne({_id: user_id});
+    if (!user)
+      return res.status(401).send({message: 'Sorry, You are not allowed to access this page.'})
+    return res.status(200).send(user)
+  }
+  catch(error) {
+    return res.sendStatus(500)
+  }
+})
+
 // Get list of users.
 app.get('/users', async (req, res) => {
   try {
@@ -252,7 +266,6 @@ app.get('/users', async (req, res) => {
 app.post('/issue-register', auth.checkAuthenticated, (req, res) => {
   try {
     let issueRegisterData = req.body
-    console.log("issueRegisterData : " + JSON.stringify(issueRegisterData))
     let issuedStatus
     if (issueRegisterData.issueStatus == "issued") {
       // Update Issued date & time.
@@ -264,7 +277,7 @@ app.post('/issue-register', auth.checkAuthenticated, (req, res) => {
       issueRegisterData.returnDate = Date.now()
       issuedStatus = "Returned"
     }
-    issueRegisterData.borrower = req.userId;
+    issueRegisterData.borrower = req.userId
     let issueRegister = new dbschema.IssueRegister(issueRegisterData)
     issueRegister.save((err, result) => {
       if (err)
