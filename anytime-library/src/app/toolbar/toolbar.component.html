@@ -11,6 +11,7 @@
       <a mat-button *ngIf="!userAuthService.isAuthenticated" class="" [routerLink]="['/login']">Login</a>
       <a mat-button *ngIf="!userAuthService.isAuthenticated" class="" [routerLink]="['/register']">Register</a>
       <a mat-button *ngIf="userAuthService.isAuthenticated" class="" (click)="userAuthService.logout()">Logout</a>
+      <a mat-button *ngIf="userAuthService.isAuthenticated" class="" [routerLink]="['/profile']">Profile</a>
     </div>
 
 

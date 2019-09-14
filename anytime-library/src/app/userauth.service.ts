@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AppConstants } from './appConstants';
 
 @Injectable({
@@ -11,10 +11,11 @@ export class UserAuthService {
   path: string;
   isError = false;
   errorMessage: string;
+  returnUrl: string;
 
   TOKEN_KEY = 'token';
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) {
     this.path = AppConstants.apiUrl + '/auth';
   }
 
@@ -46,10 +47,13 @@ export class UserAuthService {
 
   logout() {
     localStorage.removeItem(this.TOKEN_KEY);
+    this.router.navigateByUrl('/');
   }
 
   saveToken(token) {
     localStorage.setItem(this.TOKEN_KEY, token);
-    this.router.navigateByUrl('/books');
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    alert("returnUrl: "+this.returnUrl);
+    this.router.navigateByUrl(this.returnUrl);
   }
 }

@@ -17,7 +17,9 @@ export class LoginComponent implements OnInit {
   loginData = {}
   hide = true;
 
-  constructor(private userAuthService: UserAuthService, private authService: AuthService, private router: Router) {
+  constructor(private userAuthService: UserAuthService,
+              private authService: AuthService,
+              private router: Router) {
     this.userAuthService.isError = false;
     if (this.userAuthService.isAuthenticated) {
       this.router.navigate(['/books']);
@@ -25,10 +27,10 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.authState.subscribe((user) => {
-      this.user = user;
-      this.loggedIn = (user != null);
-    });
+    // this.authService.authState.subscribe((user) => {
+    //   this.user = user;
+    //   this.loggedIn = (user != null);
+    // });
   }
 
   signInWithGoogle(): void {

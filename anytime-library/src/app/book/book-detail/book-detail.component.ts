@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {BookService} from '../service/book.service';
+import { BookService } from '../service/book.service';
+import { UserAuthService } from '../../userauth.service';
 
 @Component({
   selector: 'app-book-detail',
@@ -12,7 +13,7 @@ export class BookDetailComponent implements OnInit {
   bookId: string;
   book: any;
   dataLoaded = false;
-  constructor(private route: ActivatedRoute, private bookService: BookService) {
+  constructor(private route: ActivatedRoute, private bookService: BookService, private userAuthService: UserAuthService) {
   }
 
   ngOnInit() {
@@ -30,5 +31,9 @@ export class BookDetailComponent implements OnInit {
         });
       }
     );
+  }
+
+  borrowBook() {
+    alert("Borrow Book !!");
   }
 }

@@ -248,12 +248,25 @@ app.get('/users', async (req, res) => {
 // Book issue register.
 app.post('/issue-register', (req, res) => {
   try {
-    var issueRegisterData = req.body;
-    var issueRegister = new dbschema.IssueRegister(issueRegisterData);
+    let issueRegisterData = req.body
+    console.log("issueRegisterData : " + JSON.stringify(issueRegisterData))
+    let issuedStatus
+    if (issueRegisterData.issueStatus == "issued") {
+      // Update Issued date & time.
+      issueRegisterData.issueDate = Date.now()
+      issuedStatus = "Issued"
+    }
+    else if (issueRegisterData.issueStatus == "returned") {
+      // Update Returned date & time.
+      issueRegisterData.returnDate = Date.now()
+      issuedStatus = "Returned"
+    }
+
+    var issueRegister = new dbschema.IssueRegister(issueRegisterData)
     issueRegister.save((err, result) => {
       if (err)
-        res.status(401).send({message: 'Could not able to issue, some error occurred : ' + err})
-      res.status(200).send({message: 'Successfully Issue the Book !!'})
+        res.status(401).send({message: 'Could not able to update, some error occurred : ' + err})
+      res.status(200).send({message: 'Successfully ' + issuedStatus + ' the Book !!'})
     })
   }
   catch (error) {

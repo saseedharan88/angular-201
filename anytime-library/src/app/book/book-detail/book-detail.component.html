@@ -22,7 +22,10 @@
       <p>Published <b>{{ this.book.publishedDate }}</b> by <b>{{ this.book.publisher }}</b></p>
       <p class="">
         Copies available: <b>{{ this.book.copies }}</b>&nbsp;&nbsp;&nbsp;&nbsp;
-        <a mat-raised-button color="primary" class="book-list-view__borrow_button" [routerLink]="['/books', this.book.bookId, 'details' ]">BORROW</a>
+        <a mat-raised-button color="primary" class="book-list-view__borrow_button" [routerLink]="['/books',this.book.bookId,'borrow']">
+          {{ (userAuthService.isAuthenticated) ? 'BORROW' : 'LOGIN TO BORROW' }}
+        </a>
+        <!--<a *ngIf="!userAuthService.isAuthenticated" mat-raised-button color="primary" class="book-list-view__borrow_button" [routerLink]="['/books',this.book.bookId,'borrow']"></a>-->
       </p>
       <p class="">Description: {{ this.book.description }}</p>
     </mat-card-content>

@@ -117,4 +117,24 @@ export class BookService {
         catchError(this.handleError)
       );
   }
+
+  // Borrow books.
+  borrowBook(borrowData) {
+    const issueData: any = {};
+    issueData.bookId = borrowData.bookId;
+    issueData.issueDate = '';
+    issueData.returnDate = '';
+    issueData.reviewComment = '';
+    issueData.copies = borrowData.copiesBorrow;
+    issueData.email = borrowData.email;
+    issueData.phone = borrowData.phone;
+    issueData.notificationMode = borrowData.notification;
+    issueData.rating = '';
+    issueData.issueStatus = 'issued';
+    this.http.post<any>(this.apiUrl + '/issue-register', issueData).subscribe(res => {
+      console.log('Res: ' + JSON.stringify(res));
+    }, res => {
+      alert(res.error.error);
+    });
+  }
 }

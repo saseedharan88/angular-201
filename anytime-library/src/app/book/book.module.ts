@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { BookService } from './service/book.service';
 import { BookRoutingModule } from './book-routing.module';
 import { BooksComponent } from './books/books.component';
@@ -11,6 +12,7 @@ import { BookDetailComponent } from './book-detail/book-detail.component';
 import { BookEditComponent } from './book-edit/book-edit.component';
 import { BookAddComponent } from './book-add/book-add.component';
 import { BookSearchComponent, BookAddDialogComponent } from './book-search/book-search.component';
+import { BookBorrowComponent } from './book-borrow/book-borrow.component';
 
 @NgModule({
   declarations: [
@@ -19,13 +21,15 @@ import { BookSearchComponent, BookAddDialogComponent } from './book-search/book-
     BookEditComponent,
     BookAddComponent,
     BookSearchComponent,
-    BookAddDialogComponent
+    BookAddDialogComponent,
+    BookBorrowComponent
   ],
   imports: [
     CommonModule,
     HttpClientModule,
     BookRoutingModule,
     SharedModule,
+    FormsModule,
     ReactiveFormsModule,
     MaterialModule
   ],

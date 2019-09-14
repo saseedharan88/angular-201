@@ -40,10 +40,16 @@ let Book = mongoose.model('Book',bookSchema);
 // Issue Register schema.
 var issueRegisterSchema = new Schema(
   {
+    bookId: String,
     issueDate: String,
     returnDate: String,
     reviewComment: String,
-    bookRating: String
+    copies: String,
+    email: String,
+    phone: String,
+    notificationMode: String,
+    rating: String,
+    issueStatus: String
   }
 )
 

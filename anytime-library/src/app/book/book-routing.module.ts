@@ -5,8 +5,11 @@ import { BookDetailComponent } from './book-detail/book-detail.component';
 import { BookEditComponent } from './book-edit/book-edit.component';
 import { BookAddComponent } from './book-add/book-add.component';
 import { BookSearchComponent } from './book-search/book-search.component';
+import { AuthGuard } from '../user/auth.guard';
+import {BookBorrowComponent} from './book-borrow/book-borrow.component';
 
 const routes: Routes = [
+    { path: 'books/:bookid/borrow', canActivate: [AuthGuard], component: BookBorrowComponent },
     { path: 'books/:bookid/details', component: BookDetailComponent },
     { path: 'books/:filter_by/:filter_value', component: BooksComponent },
     { path: 'books/search', component: BookSearchComponent },

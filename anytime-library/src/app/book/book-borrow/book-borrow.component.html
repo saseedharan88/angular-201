@@ -1,0 +1,92 @@
+<mat-card class="book-borrow">
+  <mat-card-header class="book-borrow__header">
+    <mat-card-title>
+      <h4>Borrow Book</h4>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="book-borrow__content">
+    <form class="book-borrow__form" [formGroup]="borrowBookForm" (ngSubmit)="save()">
+      <input type="hidden" formControlName="bookId">
+      <mat-form-field class="book-borrow__form__element">
+        <input type="text" required formControlName="bookName" matInput placeholder="Book Title">
+      </mat-form-field>
+      <mat-form-field class="book-borrow__form__element">
+        <input type="text" required formControlName="bookAuthor" matInput placeholder="Book Authors">
+      </mat-form-field>
+      <mat-form-field class="book-borrow__form__element">
+        <input type="text" required formControlName="copiesBorrow" matInput placeholder="Copies">
+      </mat-form-field>
+
+      <div formGroupName="emailGroup">
+        <mat-form-field class="book-borrow__form__element">
+          <input matInput
+                 id="emailId"
+                 type="email"
+                 placeholder="Email (required)"
+                 formControlName="email"
+                 [ngClass]="{'is-invalid': emailMessage }" />
+          <span class="invalid-feedback">
+          {{ emailMessage }}
+        </span>
+        </mat-form-field>
+        <mat-form-field class="book-borrow__form__element">
+          <input matInput
+                 id="confirmEmailId"
+                 type="email"
+                 placeholder="Confirm Email (required)"
+                 formControlName="confirmEmail"
+                 [ngClass]="{'is-invalid': borrowBookForm.get('emailGroup').errors ||
+                                             ((borrowBookForm.get('emailGroup.confirmEmail').touched ||
+                                              borrowBookForm.get('emailGroup.confirmEmail').dirty) &&
+                                              !borrowBookForm.get('emailGroup.confirmEmail').valid) }" />
+          <span class="invalid-feedback">
+              <span *ngIf="borrowBookForm.get('emailGroup').errors?.match">
+                The confirmation does not match the email address.
+              </span>
+            </span>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field class="book-borrow__form__element">
+          <input matInput
+                 id="phoneId"
+                 type="tel"
+                 placeholder="Phone"
+                 formControlName="phone"
+                 [ngClass]="{'is-invalid': !borrowBookForm.get('phone').valid }" />
+          <span class="invalid-feedback">
+            <span *ngIf="borrowBookForm.get('phone').errors?.required">
+              Please enter your phone number.
+            </span>
+          </span>
+      </mat-form-field>
+
+      <div class="book-borrow__form__element__notification">
+        <label class="">Send Notifications</label>
+        <div class="">
+          <label class="form-check-label">
+            <input class="form-check-input"
+                   type="radio"
+                   value="email"
+                   formControlName="notification">Email
+          </label>
+        </div>
+        <div class="">
+          <label class="form-check-label">
+            <input class="form-check-input"
+                   type="radio"
+                   value="text"
+                   formControlName="notification">Text
+          </label>
+        </div>
+      </div>
+
+
+      <button mat-raised-button color="primary"
+              type="submit"
+              [title]="borrowBookForm.valid ? 'Save your entered data' : 'Disabled until the form data is valid'">
+        Save
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>
