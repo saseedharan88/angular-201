@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators, AbstractControl, ValidatorFn, FormA
 import { debounceTime } from 'rxjs/operators';
 import { BookService } from '../service/book.service';
 import { ActivatedRoute } from '@angular/router';
+import {forEach} from "@angular/router/src/utils/collection";
 
 function emailMatcher(c: AbstractControl): { [key: string]: boolean } | null {
   const emailControl = c.get('email');
@@ -28,7 +29,8 @@ export class BookBorrowComponent implements OnInit {
   emailMessage: string;
   bookId: string;
   book: any;
-  availableCopies = [];
+  availCopies: number;
+  availableCopies;
 
   private validationMessages = {
     required: 'Please enter your email address.',
@@ -120,11 +122,16 @@ export class BookBorrowComponent implements OnInit {
       bookAuthor: author
     });
 
-    this.availableCopies = book.copies;
+    this.availCopies = book.copies;
     if (typeof book.copiesIssued !== 'undefined') {
-      this.availableCopies = book.copies - book.copiesIssued;
+      this.availCopies = book.copies - book.copiesIssued;
     }
-    this.availableCopies = Array(this.availableCopies).fill().map((x, i) => i + 1);
+
+    const arrayCopies = [];
+    for (let i = 1; i <= this.availCopies; i++) {
+      arrayCopies.push(i);
+    }
+    this.availableCopies = arrayCopies;
   }
 
 }

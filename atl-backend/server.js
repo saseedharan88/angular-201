@@ -292,6 +292,31 @@ app.post('/issue-register', auth.checkAuthenticated, (req, res) => {
   }
 })
 
+app.get('/issue-log', async (req, res) => {
+  try {
+    await dbschema.IssueRegister.aggregate([{
+      $lookup: {
+        from: "books", // collection name in db
+        localField: "bookId",
+        foreignField: "bookId",
+        as: "bookDetails"
+      }
+    },
+    {
+      $lookup: {
+      from: "users", // collection name in db
+        localField: "borrower",
+        foreignField: "_id",
+        as: "userDetails"
+    }}]).exec(function(err, resultSet) {
+      return res.status(200).send(resultSet)
+    });
+  }
+  catch (error) {
+    res.sendStatus(500)
+  }
+})
+
 var updateBookCopiesIssued = async function (bookId, copies, issueStatus) {
   try {
     const filter = { bookId: bookId };

@@ -141,4 +141,14 @@ export class BookService {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     this.router.navigateByUrl('/books/' + borrowData.bookId + '/details');
   }
+
+  // Get all issues log.
+  getIssuesLog(): Observable<any> {
+    return this.http.get(this.apiUrl + '/issue-log')
+      .pipe(
+        retry(1),
+        catchError(this.handleError)
+      );
+  }
+
 }

@@ -13,6 +13,7 @@ import { BookEditComponent } from './book-edit/book-edit.component';
 import { BookAddComponent } from './book-add/book-add.component';
 import { BookSearchComponent, BookAddDialogComponent } from './book-search/book-search.component';
 import { BookBorrowComponent } from './book-borrow/book-borrow.component';
+import { BooksManageComponent } from './books-manage/books-manage.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { BookBorrowComponent } from './book-borrow/book-borrow.component';
     BookAddComponent,
     BookSearchComponent,
     BookAddDialogComponent,
-    BookBorrowComponent
+    BookBorrowComponent,
+    BooksManageComponent
   ],
   imports: [
     CommonModule,

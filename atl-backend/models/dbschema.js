@@ -51,7 +51,8 @@ var issueRegisterSchema = new Schema(
     phone: String,
     notificationMode: String,
     rating: String,
-    issueStatus: String
+    issueStatus: String,
+    borrower: mongoose.Schema.ObjectId,
   }
 )
 

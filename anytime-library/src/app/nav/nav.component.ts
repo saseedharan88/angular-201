@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSidenav } from '@angular/material';
 import { BookService } from '../book/service/book.service';
+import { UserAuthService } from '../userauth.service';
 
 const SMALL_WIDTH_BREAKPOINT = 720;
 
@@ -15,16 +16,12 @@ export class NavComponent implements OnInit {
     private mediaMatcher: MediaQueryList =
         matchMedia(`(max-width: ${SMALL_WIDTH_BREAKPOINT}px)`);
 
-    isDarkTheme: boolean = false;
     filterChoosen: string;
-    constructor(private router: Router, private bookService: BookService) {
+    isAdmin = false;
+    constructor(private router: Router, private bookService: BookService, private userAuthService: UserAuthService) {
     }
 
     @ViewChild(MatSidenav) sidenav: MatSidenav;
-
-    toggleTheme() {
-        this.isDarkTheme = !this.isDarkTheme;
-    }
 
     ngOnInit() {
       this.router.events.subscribe(() => {

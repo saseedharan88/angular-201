@@ -4,7 +4,13 @@
         <mat-toolbar color="primary">
             Menu
         </mat-toolbar>
-        <mat-list role="list">
+        <mat-list role="list" *ngIf="userAuthService.userRole === 'admin'" class="admin-menu">
+            <mat-list-item>Admin menus: </mat-list-item>
+            <mat-list-item class="nav_list_item nav_list_item_first" role="listitem"><a [routerLink]="['/books/search']">Add books from google API</a></mat-list-item>
+            <mat-list-item class="nav_list_item nav_list_item_first" role="listitem"><a [routerLink]="['/books/manage']">Manage books</a></mat-list-item>
+        </mat-list>
+        <p style="color: red">{{userAuthService.userRole}}</p>
+        <mat-list role="list" *ngIf="!userAuthService.userRole" class="user-menu">
             <mat-list-item>Filter By: </mat-list-item>
             <mat-list-item>
                 <mat-button-toggle-group name="filterBy" aria-label="Filter By" value="{{ filterChoosen }}" #group="matButtonToggleGroup" (change)="onFilterByChange(group.value)">

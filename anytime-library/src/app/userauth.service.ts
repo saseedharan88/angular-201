@@ -38,7 +38,9 @@ export class UserAuthService {
 
   currentUser(): any {
     return this.http.get(this.apiUrl + '/current_user').subscribe((res: any) => {
-      localStorage.setItem(this.USER_ROLE, res.role);
+      if (typeof res.role !== 'undefined') {
+        localStorage.setItem(this.USER_ROLE, res.role);
+      }
     });
   }
 
