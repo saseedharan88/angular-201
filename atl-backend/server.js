@@ -292,8 +292,14 @@ app.post('/issue-register', auth.checkAuthenticated, (req, res) => {
   }
 })
 
-app.get('/issue-log', async (req, res) => {
+app.get('/issue-log', auth.checkAuthenticated, async (req, res) => {
   try {
+    let filters = req.query;
+    let queryString = { $match: { "userDetails._id": { $ne: null } } }
+    if (filters.filterBy == "userId") {
+      let userId = req.userId
+      queryString = { $match: { "userDetails._id": { $eq: new mongoose.Types.ObjectId(userId) } } }
+    }
     await dbschema.IssueRegister.aggregate([{
       $lookup: {
         from: "books", // collection name in db
@@ -304,11 +310,13 @@ app.get('/issue-log', async (req, res) => {
     },
     {
       $lookup: {
-      from: "users", // collection name in db
+        from: "users", // collection name in db
         localField: "borrower",
         foreignField: "_id",
         as: "userDetails"
-    }}]).exec(function(err, resultSet) {
+      }
+    },
+    queryString]).exec(function(err, resultSet) {
       return res.status(200).send(resultSet)
     });
   }

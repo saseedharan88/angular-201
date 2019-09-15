@@ -1,18 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { BookService } from '../service/book.service';
+import { BookService } from '../../book/service/book.service';
 
 @Component({
-  selector: 'app-books-manage',
-  templateUrl: './books-manage.component.html',
-  styleUrls: ['./books-manage.component.scss']
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.scss']
 })
-export class BooksManageComponent implements OnInit {
+export class DashboardComponent implements OnInit {
 
   displayedColumns;
   dataSource;
-  constructor(private route: ActivatedRoute, private bookService: BookService) {
-  }
+  constructor(private bookService: BookService) { }
 
   ngOnInit() {
 
@@ -21,7 +19,7 @@ export class BooksManageComponent implements OnInit {
       'returneddate', 'borrower'];
     const dSource = [];
 
-    this.bookService.getIssuesLog(null, null).subscribe((data: any) => {
+    this.bookService.getIssuesLog('filterBy', 'userId').subscribe((data: any) => {
 
       data.forEach((value) => {
         console.log(value.bookDetails);
@@ -40,4 +38,5 @@ export class BooksManageComponent implements OnInit {
       this.dataSource = dSource;
     });
   }
+
 }

@@ -7,9 +7,10 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { MaterialModule } from '../shared/material.module';
 import { ProfileComponent } from './profile/profile.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
-  declarations: [LoginComponent, RegisterComponent, ProfileComponent],
+  declarations: [LoginComponent, RegisterComponent, ProfileComponent, DashboardComponent],
   imports: [
     CommonModule,
     UserRoutingModule,

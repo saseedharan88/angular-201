@@ -143,8 +143,9 @@ export class BookService {
   }
 
   // Get all issues log.
-  getIssuesLog(): Observable<any> {
-    return this.http.get(this.apiUrl + '/issue-log')
+  getIssuesLog(filterBy, filterValue): Observable<any> {
+    const params = new HttpParams().set(filterBy, filterValue);
+    return this.http.get(this.apiUrl + '/issue-log', {params: params})
       .pipe(
         retry(1),
         catchError(this.handleError)

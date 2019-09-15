@@ -1,12 +1,6 @@
 let mongoose = require('mongoose')
 let Schema = mongoose.Schema;
 
-// let bookSubject = new Schema({
-//   name: String,
-//   description: String,
-//   isActive: Boolean
-// })
-
 // Subject schema.
 let subjectSchema = new Schema({
   name: String
