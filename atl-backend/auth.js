@@ -7,16 +7,27 @@ var router = express.Router()
 // User register service.
 router.post('/register', (req, res) => {
   try {
-    var userData = req.body;
-    var user = new User(userData);
-    user.save((err, newUser) => {
-      if (err)
-        res.status(401).send({message: 'Error in registering a user: ' + err})
-      createSendToken(res, newUser)
-    })
+    var registerData = req.body;
+    const user = User.findOne({email: registerData.email}, function(err, userObj){
+      if(err){
+        res.status(401).send({message: 'Error occurred while registering : ' + err})
+      }
+      else if (userObj){
+        // User exists already.
+        res.status(401).send({message: 'Email ID already exists'})
+      }
+      else{
+        var user = new User(registerData);
+        user.save((err, newUser) => {
+          if (err)
+            res.status(401).send({message: 'Error in registering a user: ' + err})
+          createSendToken(res, newUser)
+        })
+      }
+    });
   }
-  catch (error) {
-    res.sendStatus(500)
+  catch(error) {
+    return res.status(500).send({message: 'Error in registering a user : ' + error})
   }
 })
 
@@ -37,6 +48,33 @@ router.post('/login', async (req, res) => {
   }
   catch(error) {
     return res.sendStatus(500)
+  }
+})
+
+// User social login service.
+router.post('/slogin', (req, res) => {
+  try {
+    var loginData = req.body;
+    const user = User.findOne({email: loginData.email}, function(err, userObj){
+      if(err){
+        res.status(401).send({message: 'Error occurred while login : ' + err})
+      }
+      else if (userObj){
+        // User exists already.
+        createSendToken(res, userObj)
+      }
+      else{
+        var user = new User(loginData);
+        user.save((err, newUser) => {
+          if (err)
+            res.status(401).send({message: 'Error in registering a user: ' + err})
+          createSendToken(res, newUser)
+        })
+      }
+    });
+  }
+  catch(error) {
+    return res.status(500).send({message: 'Error in social login : ' + error})
   }
 })
 

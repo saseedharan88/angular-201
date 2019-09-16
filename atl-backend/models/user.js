@@ -6,7 +6,14 @@ var Schema = mongoose.Schema
 var userSchema = new Schema(
   {
     email: String,
-    password: String
+    password: String,
+    id: String, // Social ID.
+    name: String,
+    photoUrl: String, // Social Photo URL.
+    firstName: String,
+    lastName: String,
+    provider: String,
+    loginTime: Date,
   }
 )
 

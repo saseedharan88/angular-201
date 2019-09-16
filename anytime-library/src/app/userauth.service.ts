@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppConstants } from './appConstants';
+import { AuthService } from 'angularx-social-login';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class UserAuthService {
   TOKEN_KEY = 'token';
   USER_ROLE = 'role';
 
-  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) {
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private authService: AuthService) {
     this.apiUrl = AppConstants.apiUrl;
     this.path = AppConstants.apiUrl + '/auth';
   }
@@ -64,9 +65,20 @@ export class UserAuthService {
     });
   }
 
+  socialLogin(loginData) {
+    this.http.post<any>(this.path + '/slogin', loginData).subscribe(res => {
+      this.saveToken(res.token);
+      this.currentUser();
+    }, res => {
+      this.statusMessage = 'error';
+      this.statusMessageText = res.error.message;
+    });
+  }
+
   logout() {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_ROLE);
+    this.authService.signOut();
     this.router.navigateByUrl('/');
   }
 

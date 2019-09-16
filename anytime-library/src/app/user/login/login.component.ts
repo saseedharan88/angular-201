@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserAuthService } from '../../userauth.service';
 import { AuthService } from 'angularx-social-login';
 import { SocialUser } from 'angularx-social-login';
-import { GoogleLoginProvider, FacebookLoginProvider, LinkedInLoginProvider } from 'angularx-social-login';
+import { GoogleLoginProvider } from 'angularx-social-login';
 import { Router } from '@angular/router';
 
 @Component({
@@ -27,18 +27,17 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.authService.authState.subscribe((user) => {
-    //   this.user = user;
-    //   this.loggedIn = (user != null);
-    // });
+    this.authService.authState.subscribe((user) => {
+      if (user !== null) {
+        this.user = user;
+        // After Successful Social Login.
+        this.userAuthService.socialLogin(this.user);
+      }
+    });
   }
 
   signInWithGoogle(): void {
     this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
-  }
-
-  signInWithFB(): void {
-    this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
   }
 
   post() {
