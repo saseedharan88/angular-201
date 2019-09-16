@@ -14,7 +14,6 @@ import { BookAddComponent } from './book-add/book-add.component';
 import { BookSearchComponent, BookAddDialogComponent } from './book-search/book-search.component';
 import { BookBorrowComponent } from './book-borrow/book-borrow.component';
 import { BooksManageComponent } from './books-manage/books-manage.component';
-import { BookReturnComponent } from './book-return/book-return.component';
 
 @NgModule({
   declarations: [
@@ -25,8 +24,7 @@ import { BookReturnComponent } from './book-return/book-return.component';
     BookSearchComponent,
     BookAddDialogComponent,
     BookBorrowComponent,
-    BooksManageComponent,
-    BookReturnComponent
+    BooksManageComponent
   ],
   imports: [
     CommonModule,

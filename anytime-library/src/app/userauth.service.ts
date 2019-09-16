@@ -84,7 +84,7 @@ export class UserAuthService {
 
   saveToken(token) {
     localStorage.setItem(this.TOKEN_KEY, token);
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     this.router.navigateByUrl(this.returnUrl);
   }
 }

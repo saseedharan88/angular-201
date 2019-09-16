@@ -35,16 +35,24 @@ router.post('/register', (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     var loginData = req.body;
-    var user = await User.findOne({email: loginData.email});
-    if (!user)
-      return res.status(401).send({message: 'Email or Password is invalid'})
-    bcrypt.compare(loginData.password, user.password, (err, isMatch) => {
-      if (err)
-        return res.status(401).send({message: 'Error in checking ' + err})
-      if (!isMatch)
-        return res.status(401).send({message: 'Password is invalid'})
-      createSendToken(res, user)
-    })
+    const user = await User.findOne({email: loginData.email}, function(err, userObj){
+      if(err){
+        res.status(401).send({message: 'Error occurred while login : ' + err})
+      }
+      else if (userObj){
+        // User exists.
+        bcrypt.compare(loginData.password, userObj.password, (err, isMatch) => {
+          if (err)
+            return res.status(401).send({message: 'Error in checking ' + err})
+          if (!isMatch)
+            return res.status(401).send({message: 'Password is invalid'})
+          createSendToken(res, userObj)
+        })
+      }
+      else{
+        return res.status(401).send({message: 'Email or Password is invalid'})
+      }
+    });
   }
   catch(error) {
     return res.sendStatus(500)

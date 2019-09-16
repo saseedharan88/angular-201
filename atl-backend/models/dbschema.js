@@ -39,7 +39,7 @@ var issueRegisterSchema = new Schema(
     bookId: String,
     issueDate: String,
     returnDate: String,
-    reviewComment: String,
+    feedback: String,
     copies: Number,
     email: String,
     phone: String,

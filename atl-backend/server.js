@@ -176,9 +176,6 @@ app.post('/addbook', (req, res) => {
 // Update Book details service.
 app.post('/update-book-details', auth.checkAuthenticated, async (req, res) => {
   try {
-
-    console.log("Req user from cc: " + req.userId)
-
     let bookDetails = req.body;
     let bookId = bookDetails.bookId;
     let book = new dbschema.Book()
@@ -289,6 +286,44 @@ app.post('/issue-register', auth.checkAuthenticated, (req, res) => {
   }
   catch (error) {
     res.sendStatus(500)
+  }
+})
+
+app.post('/return-book', auth.checkAuthenticated, async (req, res) => {
+  try {
+    let issueRegData = req.body
+    let issueRegId = issueRegData.issueRegisterId
+    let feedback = issueRegData.feedback
+    const issue = await dbschema.IssueRegister.findByIdAndUpdate(issueRegId,
+      {$set:{
+        issueStatus: "returned",
+        feedback: feedback,
+        returnDate: Date.now()
+      }},
+      {new: true}, (err, doc) => {
+      if (err) {
+        res.status(401).send({message: 'Error occurred while returning book : ' + err})
+      }
+      if (!doc) {
+        res.status(401).send({message: 'Record not available : ' + err})
+      }
+      return doc
+    });
+    // Update copies in book schema.
+    let copiesFromReg = issue.copies
+    let bookId = issue.bookId
+    dbschema.Book.findOne({bookId: bookId}, (err, book) => {
+      book.copiesIssued = parseFloat(book.copiesIssued) - parseFloat(copiesFromReg)
+      book.save((err, result) => {
+        if (err) {
+          return res.send({ success: false, message: "Some error occurred " + err.message })
+        }
+        return res.send({ success: true, message: "Successfully returned the book !!", data: result })
+      })
+    })
+  }
+  catch (error) {
+    res.status(401).send({message: 'Error occurred while returning book : ' + error})
   }
 })
 

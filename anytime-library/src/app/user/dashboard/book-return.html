@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>Book return form</h1>
+<form [formGroup]="bookReturnForm" class="book-return-form">
+    <div mat-dialog-content>
+        <div class="alert" *ngIf="success" [ngClass]="success == true ? 'success': ''">
+            <span class="closebtn" (click)="closeAlert()">&times;</span>{{ message }}
+        </div>
+        <input type="hidden" formControlName="issueRegisterId">
+        <mat-form-field class="book-return-form__element">
+            <textarea matInput formControlName="feedback" placeholder="Leave a feedback"></textarea>
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-button (click)="onNoClick()">Cancel</button>
+        <button (click)="returnBook()" class="book-return-form__mat_icon" mat-button color="primary" aria-label="Return" cdkFocusInitial>Return</button>
+    </div>
+</form>

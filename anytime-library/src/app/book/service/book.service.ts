@@ -8,6 +8,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 
 const headers = new HttpHeaders({
   'Content-type': 'application/json',
+  'Authorization': 'token ' + localStorage.getItem('token')
 });
 
 @Injectable({
@@ -140,6 +141,13 @@ export class BookService {
     });
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     this.router.navigateByUrl('/books/' + borrowData.bookId + '/details');
+  }
+
+  returnBook(issueRegId): Observable<any> {
+    return this.http.post<any>(this.apiUrl + '/return-book', issueRegId, {headers: headers})
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
   // Get all issues log.
