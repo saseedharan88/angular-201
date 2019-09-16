@@ -3,26 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="cd3851dd-7da7-4261-95dc-1927b70e4091" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anytime-library/src/app/book/book-return/book-return.component.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/anytime-library/src/app/book/book-return/book-return.component.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/anytime-library/src/app/book/book-return/book-return.component.spec.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/anytime-library/src/app/book/book-return/book-return.component.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/anytime-library/src/app/book/book-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/anytime-library/src/app/book/book-routing.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anytime-library/src/app/book/book.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/anytime-library/src/app/book/book.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anytime-library/src/app/book/books-manage/books-manage.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/anytime-library/src/app/book/books-manage/books-manage.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anytime-library/src/app/book/service/book.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/anytime-library/src/app/book/service/book.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anytime-library/src/app/nav/nav.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/anytime-library/src/app/nav/nav.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anytime-library/src/app/nav/nav.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/anytime-library/src/app/nav/nav.component.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anytime-library/src/app/toolbar/toolbar.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/anytime-library/src/app/toolbar/toolbar.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anytime-library/src/app/user/dashboard/dashboard.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/anytime-library/src/app/user/dashboard/dashboard.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anytime-library/src/app/user/dashboard/dashboard.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/anytime-library/src/app/user/dashboard/dashboard.component.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anytime-library/src/app/user/dashboard/dashboard.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/anytime-library/src/app/user/dashboard/dashboard.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anytime-library/src/app/user/user.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/anytime-library/src/app/user/user.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anytime-library/src/app/userauth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/anytime-library/src/app/userauth.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anytime-library/src/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/anytime-library/src/styles.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atl-backend/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/atl-backend/auth.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atl-backend/models/dbschema.js" beforeDir="false" afterPath="$PROJECT_DIR$/atl-backend/models/dbschema.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atl-backend/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/atl-backend/server.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -99,7 +79,7 @@
     <session id="-23167623">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="24" />
+          <entry key="project.closed" value="25" />
           <entry key="project.open.time.0" value="4" />
           <entry key="project.open.time.1" value="4" />
           <entry key="project.open.time.2" value="1" />
@@ -594,16 +574,15 @@
       <workItem from="1568265091799" duration="5811000" />
       <workItem from="1568355159531" duration="1981000" />
       <workItem from="1568436527784" duration="31460000" />
-      <workItem from="1568609696559" duration="26265000" />
+      <workItem from="1568609696559" duration="26709000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="311860000" />
+    <option name="totallyTimeSpent" value="312304000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="724" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23182553" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
