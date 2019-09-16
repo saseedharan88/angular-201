@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
   registerData = {}
+  hide = true;
 
   constructor(private userAuthService: UserAuthService, private router: Router) {
     if (this.userAuthService.isAuthenticated) {

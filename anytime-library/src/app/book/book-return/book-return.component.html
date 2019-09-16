@@ -1,0 +1,34 @@
+<mat-card class="book-return">
+  <mat-card-header class="book-return__header">
+    <mat-card-title>
+      <h4>Return the Book</h4>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="book-return__content">
+
+    <div class="alert" *ngIf="bookService.statusMessage" [ngClass]="bookService.statusMessage">
+      <span class="closebtn" (click)="closeAlert()">&times;</span>{{ bookService.statusMessageText }}
+    </div>
+
+    <form class="book-return__form" [formGroup]="borrowBookForm" (ngSubmit)="save()">
+      <input type="hidden" formControlName="bookId">
+      <mat-form-field class="book-return__form__element">
+        <input type="text" required formControlName="bookName" matInput placeholder="Book Title">
+      </mat-form-field>
+      <mat-form-field class="book-return__form__element">
+        <input type="text" required formControlName="bookAuthor" matInput placeholder="Book Authors">
+      </mat-form-field>
+      <mat-form-field class="book-return__form__element">
+        <mat-label>Copies Returning</mat-label>
+        <select matNativeControl required formControlName="copiesBorrow">
+          <option *ngFor="let number of this.availableCopies" value="{{ number }}">{{ number }}</option>
+        </select>
+      </mat-form-field>
+      <button mat-raised-button color="primary"
+              type="submit"
+              [title]="borrowReturnForm.valid ? 'Save your entered data' : 'Disabled until the form data is valid'">
+        Return
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>

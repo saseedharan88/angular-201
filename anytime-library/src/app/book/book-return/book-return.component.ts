@@ -1,30 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl, ValidatorFn, FormArray } from '@angular/forms';
-import { debounceTime } from 'rxjs/operators';
-import { BookService } from '../service/book.service';
-import { ActivatedRoute } from '@angular/router';
-
-function emailMatcher(c: AbstractControl): { [key: string]: boolean } | null {
-  const emailControl = c.get('email');
-  const confirmControl = c.get('confirmEmail');
-
-  if (emailControl.pristine || confirmControl.pristine) {
-    return null;
-  }
-
-  if (emailControl.value === confirmControl.value) {
-    return null;
-  }
-  return { match: true };
-}
+import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {ActivatedRoute} from "@angular/router";
+import {BookService} from "../service/book.service";
+import {debounceTime} from "rxjs/operators";
 
 @Component({
-  selector: 'app-book-borrow',
-  templateUrl: './book-borrow.component.html',
-  styleUrls: ['./book-borrow.component.scss']
+  selector: 'app-book-return',
+  templateUrl: './book-return.component.html',
+  styleUrls: ['./book-return.component.scss']
 })
-export class BookBorrowComponent implements OnInit {
-  borrowBookForm: FormGroup;
+export class BookReturnComponent implements OnInit {
+
+  borrowReturnForm: FormGroup;
   emailMessage: string;
   bookId: string;
   book: any;
@@ -40,15 +27,11 @@ export class BookBorrowComponent implements OnInit {
   constructor(private route: ActivatedRoute, private fb: FormBuilder, private bookService: BookService) { }
 
   ngOnInit() {
-    this.borrowBookForm = this.fb.group({
+    this.borrowReturnForm = this.fb.group({
       userId: {value: ''},
       bookId: {value: ''},
       bookName: {value: '', disabled: true},
       bookAuthor: {value: '', disabled: true},
-      emailGroup: this.fb.group({
-        email: ['', [Validators.required, Validators.email]],
-        confirmEmail: ['', Validators.required],
-      }, { validator: emailMatcher }),
       copiesBorrow: '',
       termsAndConditions: true,
       phone: '',
@@ -57,11 +40,11 @@ export class BookBorrowComponent implements OnInit {
       feedback: ['', [Validators.required, Validators.minLength(10)]]
     });
 
-    this.borrowBookForm.get('notification').valueChanges.subscribe(
+    this.borrowReturnForm.get('notification').valueChanges.subscribe(
       value => this.setNotification(value)
     );
 
-    const emailControl = this.borrowBookForm.get('emailGroup.email');
+    const emailControl = this.borrowReturnForm.get('emailGroup.email');
     emailControl.valueChanges.pipe(
       debounceTime(1000)
     ).subscribe(
@@ -84,7 +67,7 @@ export class BookBorrowComponent implements OnInit {
   }
 
   save() {
-    this.bookService.borrowBook(this.borrowBookForm.value);
+    this.bookService.borrowBook(this.borrowReturnForm.value);
   }
 
   setMessage(c: AbstractControl): void {
@@ -96,7 +79,7 @@ export class BookBorrowComponent implements OnInit {
   }
 
   setNotification(notifyVia: string): void {
-    const phoneControl = this.borrowBookForm.get('phone');
+    const phoneControl = this.borrowReturnForm.get('phone');
     if (notifyVia === 'text') {
       phoneControl.setValidators(Validators.required);
     } else {
@@ -115,7 +98,7 @@ export class BookBorrowComponent implements OnInit {
       }
     });
 
-    this.borrowBookForm.patchValue({
+    this.borrowReturnForm.patchValue({
       bookId: book.bookId,
       bookName: book.title,
       bookAuthor: author

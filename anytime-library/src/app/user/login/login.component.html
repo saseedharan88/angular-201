@@ -1,9 +1,7 @@
 <mat-card class="login-card">
-
   <div class="alert" *ngIf="userAuthService.statusMessage" [ngClass]="userAuthService.statusMessage">
     <span class="closebtn" (click)="closeAlert()">&times;</span>{{ userAuthService.statusMessageText }}
   </div>
-
   <mat-card-title>Login</mat-card-title>
   <mat-card-content>
     <form class="login-form">
@@ -20,40 +18,5 @@
     <div class="socialLoginButtons">
       <button class="socialBtn socialBtn--google mx-1" (click)="signInWithGoogle()">Google</button>
     </div>
-    <!--<mat-card-actions>-->
-      <!--<button mat-button class="socialBtn socialBtn&#45;&#45;google mx-1" (click)="signInWithGoogle()">Login with Google</button>-->
-      <!--<button mat-button class="socialBtn socialBtn&#45;&#45;facebook mx-1" (click)="signInWithFB()">Login with Facebook</button>-->
-      <!--&lt;!&ndash;<button mat-button>LIKE</button>&ndash;&gt;-->
-      <!--&lt;!&ndash;<button mat-button>SHARE</button>&ndash;&gt;-->
-    <!--</mat-card-actions>-->
   </mat-card-content>
 </mat-card>
-
-<!--<div class="jumbotron bg-transparent text-center">-->
-  <!--<div *ngIf="!user" class="card text-center">-->
-    <!--<h6 class="card-header">-->
-      <!--Social Login Demo-->
-    <!--</h6>-->
-    <!--<div class="card-block">-->
-      <!--<h4 class="card-title">Not signed in</h4>-->
-      <!--<p class="card-text">Sign in with</p>-->
-    <!--</div>-->
-    <!--<div class="card-block">-->
-
-    <!--</div>-->
-  <!--</div>-->
-  <!--<div *ngIf="user" class="card text-center">-->
-    <!--<h6 class="card-header">-->
-      <!--Social Login Demo-->
-    <!--</h6>-->
-    <!--<div class="card-block"></div>-->
-    <!--<img class="card-img-top img-responsive photo" src="{{ user.photoUrl }}">-->
-    <!--<div class="card-block">-->
-      <!--<h4 class="card-title">{{ user.name }}</h4>-->
-      <!--<p class="card-text">{{ user.email }}</p>-->
-    <!--</div>-->
-    <!--<div class="card-block">-->
-      <!--<button class="btn btn-danger" (click)="signOut()">Sign out</button>-->
-    <!--</div>-->
-  <!--</div>-->
-<!--</div>-->

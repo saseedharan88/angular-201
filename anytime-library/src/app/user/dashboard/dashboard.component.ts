@@ -14,9 +14,8 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
 
-    this.displayedColumns = [ 'title', 'copiesissued',
-      'issuedstatus', 'issueddate',
-      'returneddate', 'borrower'];
+    this.displayedColumns = [ 'title', 'copiesissued', 'issueddate',
+      'returneddate', 'return'];
     const dSource = [];
 
     this.bookService.getIssuesLog('filterBy', 'userId').subscribe((data: any) => {
@@ -24,6 +23,7 @@ export class DashboardComponent implements OnInit {
       data.forEach((value) => {
         console.log(value.bookDetails);
         const detail: any = {};
+        detail.bookId = value.bookId;
         detail.title = value.bookDetails[0].title;
         detail.copies = value.bookDetails[0].copies;
         detail.copiesissued = value.copies;

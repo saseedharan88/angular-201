@@ -1,9 +1,31 @@
-.registration-form {
-  min-width: 150px;
-  max-width: 500px;
+@import "../../../shared";
+
+.register-card {
+  margin: auto;
+  &__or_separator {
+    padding: 5% 0 5% 50%;
+  }
+  @include breakpoint($up-medium) {
+    width: 60%;
+  }
+  @include breakpoint($medium) {
+    width: 60%;
+  }
+  @include breakpoint($large) {
+    width: 60%;
+  }
+  @include breakpoint($small-max) {
+    width: 60%;
+  }
+  @include breakpoint($small-min) {
+    width: 60%;
+  }
+}
+
+.register-form {
   width: 100%;
 }
 
-.registration-full-width {
+.register-full-width {
   width: 100%;
 }

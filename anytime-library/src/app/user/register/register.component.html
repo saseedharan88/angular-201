@@ -1,24 +1,31 @@
-<mat-card>
-  <mat-card-header>
-
-    <div class="alert" *ngIf="userAuthService.statusMessage" [ngClass]="userAuthService.statusMessage">
-      <span class="closebtn" (click)="closeAlert()">&times;</span>{{ userAuthService.statusMessageText }}
-    </div>
-
-    <mat-card-title>
-      <h4>Register New User</h4>
-    </mat-card-title>
-  </mat-card-header>
+<mat-card class="register-card">
+  <div class="alert" *ngIf="userAuthService.statusMessage" [ngClass]="userAuthService.statusMessage">
+    <span class="closebtn" (click)="closeAlert()">&times;</span>{{ userAuthService.statusMessageText }}
+  </div>
+  <mat-card-title>Register New User</mat-card-title>
   <mat-card-content>
-    <form class="registration-form">
-      <mat-form-field class="registration-full-width">
+    <form class="register-form">
+      <mat-form-field class="register-full-width">
         <input [(ngModel)]="registerData.email" name="email" matInput placeholder="Email ID" value="">
       </mat-form-field>
-      <mat-form-field class="registration-full-width">
+      <mat-form-field class="register-full-width">
         <input [(ngModel)]="registerData.password" name="password" matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'">
         <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
       </mat-form-field>
+      <mat-form-field class="register-full-width">
+        <input [(ngModel)]="registerData.name" name="name" matInput placeholder="Name" value="">
+      </mat-form-field>
+      <mat-form-field class="register-full-width">
+        <input [(ngModel)]="registerData.firstName" name="name" matInput placeholder="First Name" value="">
+      </mat-form-field>
+      <mat-form-field class="register-full-width">
+        <input [(ngModel)]="registerData.lastName" name="name" matInput placeholder="Last Name" value="">
+      </mat-form-field>
       <button (click)="post()" mat-raised-button color="primary">Register</button>
     </form>
+    <div class="register-card__or_separator">(Or)</div>
+    <div class="socialLoginButtons">
+      <button class="socialBtn socialBtn--google mx-1" (click)="signInWithGoogle()">Google</button>
+    </div>
   </mat-card-content>
 </mat-card>

@@ -7,10 +7,12 @@ import { BookAddComponent } from './book-add/book-add.component';
 import { BookSearchComponent } from './book-search/book-search.component';
 import { BooksManageComponent } from './books-manage/books-manage.component';
 import { AuthGuard } from '../user/auth.guard';
-import {BookBorrowComponent} from './book-borrow/book-borrow.component';
+import { BookBorrowComponent } from './book-borrow/book-borrow.component';
+import { BookReturnComponent } from './book-return/book-return.component';
 
 const routes: Routes = [
     { path: 'books/:bookid/borrow', canActivate: [AuthGuard], component: BookBorrowComponent },
+    { path: 'books/:bookid/return', canActivate: [AuthGuard], component: BookReturnComponent },
     { path: 'books/:bookid/details', component: BookDetailComponent },
     { path: 'books/:filter_by/:filter_value', component: BooksComponent },
     { path: 'books/search', canActivate: [AuthGuard], data: { roles: ['admin'] }, component: BookSearchComponent },

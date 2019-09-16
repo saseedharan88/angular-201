@@ -1,0 +1,10 @@
+.book-return {
+  width: 60%;
+  margin: auto;
+  &__form__element {
+    width: 100%;
+    &__notification {
+      margin: 10px 0px 10px 0px;
+    }
+  }
+}
