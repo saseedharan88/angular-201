@@ -14,10 +14,10 @@ export class LoginComponent implements OnInit {
 
   user: SocialUser;
   loggedIn: boolean;
-  loginData = {}
+  loginData = {email: '', password: ''};
   hide = true;
 
-  constructor(private userAuthService: UserAuthService,
+  constructor(public userAuthService: UserAuthService,
               private authService: AuthService,
               private router: Router) {
     this.userAuthService.isError = false;

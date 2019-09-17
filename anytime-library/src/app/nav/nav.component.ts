@@ -18,7 +18,7 @@ export class NavComponent implements OnInit {
 
     filterChoosen: string;
     isAdmin = false;
-    constructor(private router: Router, private bookService: BookService, private userAuthService: UserAuthService) {
+    constructor(private router: Router, private bookService: BookService, public userAuthService: UserAuthService) {
     }
 
     @ViewChild(MatSidenav) sidenav: MatSidenav;

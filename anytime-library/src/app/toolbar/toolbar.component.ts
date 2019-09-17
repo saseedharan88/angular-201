@@ -14,7 +14,7 @@ export class ToolbarComponent implements OnInit {
   loginData = {}
 
   @Output() toggleSidenav = new EventEmitter<void>();
-  constructor(private userAuthService: UserAuthService, private authService: AuthService) { }
+  constructor(public userAuthService: UserAuthService, private authService: AuthService) { }
 
   ngOnInit() {
     // this.authService.authState.subscribe((user) => {

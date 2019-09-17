@@ -14,7 +14,7 @@ export class BookDetailComponent implements OnInit {
   book: any;
   dataLoaded = false;
   availableCopies = 0;
-  constructor(private route: ActivatedRoute, private bookService: BookService, private userAuthService: UserAuthService) {
+  constructor(private route: ActivatedRoute, public bookService: BookService, private userAuthService: UserAuthService) {
   }
 
   ngOnInit() {

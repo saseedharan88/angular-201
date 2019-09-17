@@ -37,7 +37,7 @@ export class BookBorrowComponent implements OnInit {
   };
 
 
-  constructor(private route: ActivatedRoute, private fb: FormBuilder, private bookService: BookService) { }
+  constructor(private route: ActivatedRoute, private fb: FormBuilder, public bookService: BookService) { }
 
   ngOnInit() {
     this.borrowBookForm = this.fb.group({
